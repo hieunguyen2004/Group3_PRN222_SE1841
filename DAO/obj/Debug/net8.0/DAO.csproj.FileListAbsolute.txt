@@ -1,0 +1,14 @@
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\bin\Debug\net8.0\DAO.deps.json
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\bin\Debug\net8.0\DAO.dll
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\bin\Debug\net8.0\DAO.pdb
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.AssemblyInfoInputs.cache
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.AssemblyInfo.cs
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.csproj.CoreCompileInputs.cache
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.dll
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\refint\DAO.dll
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.pdb
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\ref\DAO.dll
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\bin\Debug\net8.0\DAO.runtimeconfig.json
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.csproj.AssemblyReference.cache
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\DAO\obj\Debug\net8.0\DAO.genruntimeconfig.cache

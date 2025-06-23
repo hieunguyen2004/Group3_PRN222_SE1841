@@ -1,0 +1,14 @@
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\bin\Debug\net8.0\Service.deps.json
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\bin\Debug\net8.0\Service.runtimeconfig.json
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\bin\Debug\net8.0\Service.dll
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\bin\Debug\net8.0\Service.pdb
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.csproj.AssemblyReference.cache
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.AssemblyInfoInputs.cache
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.AssemblyInfo.cs
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.csproj.CoreCompileInputs.cache
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.dll
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\refint\Service.dll
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.pdb
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\Service.genruntimeconfig.cache
+C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\obj\Debug\net8.0\ref\Service.dll
