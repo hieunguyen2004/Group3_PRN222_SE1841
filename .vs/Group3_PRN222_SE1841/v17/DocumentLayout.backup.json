@@ -1,9 +1,9 @@
 {
   "Version": 1,
-  "WorkspaceRootPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\",
+  "WorkspaceRootPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\",
   "Documents": [
     {
-      "AbsoluteMoniker": "D:0:0:{E6E61699-5218-4DFB-B2EA-B60DA988D984}|TopCVWeb\\TopCVWeb.csproj|c:\\users\\trong\\desktop\\prn222\\group3_prn222_topcvweb\\topcvweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
+      "AbsoluteMoniker": "D:0:0:{E6E61699-5218-4DFB-B2EA-B60DA988D984}|TopCVWeb\\TopCVWeb.csproj|c:\\users\\trong\\desktop\\prn222\\group3_prn222_se1841\\topcvweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}",
       "RelativeMoniker": "D:0:0:{E6E61699-5218-4DFB-B2EA-B60DA988D984}|TopCVWeb\\TopCVWeb.csproj|solutionrelative:topcvweb\\program.cs||{A6C744A8-0E4A-4FC6-886A-064283054674}"
     }
   ],
@@ -44,9 +44,9 @@
               "$type": "Document",
               "DocumentIndex": 0,
               "Title": "Program.cs",
-              "DocumentMoniker": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\TopCVWeb\\Program.cs",
+              "DocumentMoniker": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\TopCVWeb\\Program.cs",
               "RelativeDocumentMoniker": "TopCVWeb\\Program.cs",
-              "ToolTip": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\TopCVWeb\\Program.cs",
+              "ToolTip": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\TopCVWeb\\Program.cs",
               "RelativeToolTip": "TopCVWeb\\Program.cs",
               "ViewState": "AgIAAAAAAAAAAAAAAAAAABEAAAAAAAAAAAAAAA==",
               "Icon": "ae27a6b0-e345-4288-96df-5eaf394ee369.000738|",

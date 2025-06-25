@@ -16,6 +16,6 @@ build_property.EnforceExtendedAnalyzerRules =
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property._SupportedPlatformList = Linux,macOS,Windows
 build_property.RootNamespace = Service
-build_property.ProjectDir = C:\Users\trong\Desktop\PRN222\Group3_PRN222_TopCVWeb\Service\
+build_property.ProjectDir = C:\Users\trong\Desktop\PRN222\Group3_PRN222_SE1841\Service\
 build_property.EnableComHosting = 
 build_property.EnableGeneratedComInterfaceComImportInterop = 

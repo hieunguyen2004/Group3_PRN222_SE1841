@@ -14,7 +14,7 @@ using System.Reflection;
 [assembly: System.Reflection.AssemblyCompanyAttribute("TopCVWeb")]
 [assembly: System.Reflection.AssemblyConfigurationAttribute("Debug")]
 [assembly: System.Reflection.AssemblyFileVersionAttribute("1.0.0.0")]
-[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0")]
+[assembly: System.Reflection.AssemblyInformationalVersionAttribute("1.0.0+6d6773f0f68aef94e97be84e9ff7dd1d28c2bbda")]
 [assembly: System.Reflection.AssemblyProductAttribute("TopCVWeb")]
 [assembly: System.Reflection.AssemblyTitleAttribute("TopCVWeb")]
 [assembly: System.Reflection.AssemblyVersionAttribute("1.0.0.0")]

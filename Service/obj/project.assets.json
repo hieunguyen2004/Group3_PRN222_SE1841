@@ -4728,11 +4728,11 @@
   "project": {
     "version": "1.0.0",
     "restore": {
-      "projectUniqueName": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\Service\\Service.csproj",
+      "projectUniqueName": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\Service\\Service.csproj",
       "projectName": "Service",
-      "projectPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\Service\\Service.csproj",
+      "projectPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\Service\\Service.csproj",
       "packagesPath": "C:\\Users\\trong\\.nuget\\packages\\",
-      "outputPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\Service\\obj\\",
+      "outputPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\Service\\obj\\",
       "projectStyle": "PackageReference",
       "fallbackFolders": [
         "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"

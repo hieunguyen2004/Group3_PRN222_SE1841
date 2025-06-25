@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\DAO\\DAO.csproj": {}
+    "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\DAO\\DAO.csproj": {}
   },
   "projects": {
-    "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\DAO\\DAO.csproj": {
+    "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\DAO\\DAO.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\DAO\\DAO.csproj",
+        "projectUniqueName": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\DAO\\DAO.csproj",
         "projectName": "DAO",
-        "projectPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\DAO\\DAO.csproj",
+        "projectPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\DAO\\DAO.csproj",
         "packagesPath": "C:\\Users\\trong\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_TopCVWeb\\DAO\\obj\\",
+        "outputPath": "C:\\Users\\trong\\Desktop\\PRN222\\Group3_PRN222_SE1841\\DAO\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
