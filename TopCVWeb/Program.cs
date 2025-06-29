@@ -24,6 +24,25 @@ startupLogger.LogCritical("Check critical message");
 startupLogger.LogWarning("Check Warning message");
 startupLogger.LogError("Check error message");
 
+try
+{
+    using (var scope = app.Services.CreateScope())
+    {
+        var dbContext = scope.ServiceProvider.GetRequiredService<MyDbContext>();
+        if (dbContext.Database.CanConnect())
+        {
+            startupLogger.LogInformation("Database connection successful. Database ready.");
+        }
+        else
+        {
+            startupLogger.LogCritical("CANNOT CONNECT TO DATABASE! Please check the connection string and database status.");
+        }
+    }
+}
+catch (Exception ex)
+{
+    startupLogger.LogCritical(ex, "An error occurred while checking database connection: {Message}", ex.Message);
+}
 
 // Configure the HTTP request pipeline.
 if (!app.Environment.IsDevelopment())
