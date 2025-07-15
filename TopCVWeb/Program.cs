@@ -1,5 +1,9 @@
 using DAO.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository;
+using Repository.Interface;
+using Service;
+using Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,6 +17,12 @@ builder.Services.AddControllersWithViews();
 
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+
+builder.Services.AddScoped<ICVRepository, CVRepository>();
+builder.Services.AddScoped<ICVService, CVService>();
+
+
+
 
 var app = builder.Build();
 
