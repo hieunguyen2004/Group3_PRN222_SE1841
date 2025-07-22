@@ -36,6 +36,8 @@ namespace Repository
         public async Task<List<Cv>> GetCVsBySeekerIdAsync(int seekerId)
         {
             return await _context.Cvs
+                .Include(c=>c.Applications)
+                .ThenInclude(a=>a.Job)
                 .Where(cv => cv.SeekerId == seekerId)
                 .OrderByDescending(cv => cv.CvId)
                 .ToListAsync();

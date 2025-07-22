@@ -8,12 +8,14 @@ namespace TopCVWeb.Controllers
     public class CVController : Controller
     {
         private readonly ICVService _cvService;
+        private readonly IApplicationService _applicationService;
         private readonly IWebHostEnvironment _env;
 
-        public CVController(ICVService cvService, IWebHostEnvironment env)
+        public CVController(ICVService cvService, IWebHostEnvironment env,IApplicationService applicationService)
         {
             _cvService = cvService;
             _env = env;
+            _applicationService = applicationService;
         }
         public async Task<IActionResult> List()
         {
@@ -26,7 +28,7 @@ namespace TopCVWeb.Controllers
             //}
 
             var cvs = await _cvService.GetCVsBySeekerIdAsync(2);
-            ViewBag.SeekerId = 2;
+            //ViewBag.SeekerId = 2;
 
             return View(cvs);
         }
@@ -47,7 +49,6 @@ namespace TopCVWeb.Controllers
                 return RedirectToAction("UploadForm");
             }
 
-            
             byte[] fileBytes;
             using (var memoryStream = new MemoryStream())
             {
@@ -55,26 +56,30 @@ namespace TopCVWeb.Controllers
                 fileBytes = memoryStream.ToArray();
             }
 
-            
-            bool exists = await _cvService.ExistsByContentAsync(fileBytes);
-            if (exists)
-            {
-                TempData["Error"] = "This CV file already exists.";
-                return RedirectToAction("UploadForm");
-            }
+            //bool exists = await _cvService.ExistsByContentAsync(fileBytes);
+            //if (exists)
+            //{
+            //    TempData["Error"] = "This CV file already exists.";
+            //    return RedirectToAction("UploadForm");
+            //}
 
+            
             var cv = new Cv
             {
-                SeekerId = 2,
+                SeekerId = 2,//static
                 CvStatus = "Pending",
-                CvLink = fileBytes
+                CvLink = fileBytes,
+                FileName = Path.GetFileName(cvFile.FileName)
             };
 
             await _cvService.AddCVAsync(cv);
+            await _applicationService.AddApplication(8, cv.CvId);
+            
 
-            TempData["Success"] = "CV uploaded and saved to DB!";
-            return RedirectToAction("Upload");
+            TempData["Success"] = "CV uploaded and application submitted!";
+            return RedirectToAction("List");
         }
+
 
 
         public async Task<IActionResult> ViewCV(int cvId)

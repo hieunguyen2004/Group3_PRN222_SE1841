@@ -20,6 +20,8 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 
 builder.Services.AddScoped<ICVRepository, CVRepository>();
 builder.Services.AddScoped<ICVService, CVService>();
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IApplicationService, ApplicationService>();
 
 
 

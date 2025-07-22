@@ -23,6 +23,8 @@ public partial class Cv
     [Column("cvLink")]
     public byte[]? CvLink { get; set; }
 
+    [Column("fileName")]
+    public string? FileName { get; set; }
     [InverseProperty("Cv")]
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 
