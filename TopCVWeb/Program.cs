@@ -1,5 +1,9 @@
-using DAO.Models;
+﻿using DAO.Models;
 using Microsoft.EntityFrameworkCore;
+using Repository;
+using Repository.Interface;
+using Service;
+using Service.Interface;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,9 +14,18 @@ builder.Logging.ClearProviders();
 builder.Logging.AddLog4Net(log4NetConfigPath);
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddSession();
 
 builder.Services.AddDbContext<MyDbContext>(options =>
-    options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
+    options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
+
+builder.Services.AddScoped<ICVRepository, CVRepository>();
+builder.Services.AddScoped<ICVService, CVService>();
+builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IUserService, UserService>();
+
+
+
 
 var app = builder.Build();
 
@@ -55,6 +68,7 @@ else
 {
     startupLogger.LogInformation("Application is running in Development environment.");
 }
+app.UseSession();
 
 app.UseHttpsRedirection();
 app.UseStaticFiles();

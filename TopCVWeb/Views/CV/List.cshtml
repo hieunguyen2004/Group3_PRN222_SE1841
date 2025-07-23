@@ -1,0 +1,43 @@
+﻿@using DAO.Models
+@model List<Cv>
+
+<h2>My CVs</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>CV Title</th>
+            <th>Status</th>
+          
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+            int index = 1;
+            foreach (var cv in Model)
+            {
+                <tr>
+                    <td>@index</td>
+                    <td>@cv.CvStatus</td>
+                    
+                </tr>
+                index++;
+            }
+        }
+        else
+        {
+            <tr><td colspan="3">No CVs uploaded yet.</td></tr>
+        }
+    </tbody>
+</table>
+
+<hr />
+
+<h4>Upload New CV</h4>
+<form asp-controller="CV" asp-action="Upload" method="post" enctype="multipart/form-data">
+    <input type="hidden" name="seekerId" value="@ViewBag.SeekerId" />
+    <input type="file" name="cvFile" accept=".pdf" required class="form-control mb-2" />
+    <button type="submit" class="btn btn-primary">Upload CV</button>
+</form>
