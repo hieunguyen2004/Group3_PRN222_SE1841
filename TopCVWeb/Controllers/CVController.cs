@@ -9,33 +9,44 @@ namespace TopCVWeb.Controllers
     {
         private readonly ICVService _cvService;
         private readonly IApplicationService _applicationService;
+        private readonly IJobSeekerService _jobSeekerService;
         private readonly IWebHostEnvironment _env;
 
-        public CVController(ICVService cvService, IWebHostEnvironment env,IApplicationService applicationService)
+        public CVController(ICVService cvService, IWebHostEnvironment env,IApplicationService applicationService, IJobSeekerService jobSeekerService)
         {
             _cvService = cvService;
             _env = env;
             _applicationService = applicationService;
+            _jobSeekerService = jobSeekerService;
         }
         public async Task<IActionResult> List()
         {
-            //int userId = 2; // From session or auth
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
+            {
+                return Unauthorized(); // or RedirectToAction("Login")
+            }
 
-            //var seeker = await _context.JobSeekers.FirstOrDefaultAsync(js => js.UserId == userId);
-            //if (seeker == null)
-            //{
-            //    return Unauthorized();
-            //}
+            var seeker = await _jobSeekerService.GetJobSeekerByUser(userId.Value);
+            if (seeker == null)
+            {
+                return Unauthorized();
+            }
 
-            var cvs = await _cvService.GetCVsBySeekerIdAsync(2);
-            //ViewBag.SeekerId = 2;
+            var cvs = await _cvService.GetCVsBySeekerIdAsync(seeker.SeekerId);
 
             return View(cvs);
         }
 
+
         [HttpPost]
         public async Task<IActionResult> Upload(int seekerId, IFormFile cvFile)
         {
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
+            {
+                return Unauthorized(); // or RedirectToAction("Login")
+            }
             if (cvFile == null || cvFile.Length == 0)
             {
                 TempData["Error"] = "Please upload a valid PDF file.";
@@ -63,10 +74,10 @@ namespace TopCVWeb.Controllers
             //    return RedirectToAction("UploadForm");
             //}
 
-            
+            var seeker = await _jobSeekerService.GetJobSeekerByUser(userId.Value);
             var cv = new Cv
             {
-                SeekerId = 2,//static
+                SeekerId =  seeker.SeekerId,
                 CvStatus = "Pending",
                 CvLink = fileBytes,
                 FileName = Path.GetFileName(cvFile.FileName)
