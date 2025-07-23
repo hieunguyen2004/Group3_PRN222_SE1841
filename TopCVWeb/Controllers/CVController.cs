@@ -90,9 +90,10 @@ namespace TopCVWeb.Controllers
                 return NotFound();
             }
 
-            return File(cv.CvLink, "application/pdf", "cv.pdf");
+            return File(cv.CvLink, "application/pdf");
+
         }
-        
+
 
     }
 

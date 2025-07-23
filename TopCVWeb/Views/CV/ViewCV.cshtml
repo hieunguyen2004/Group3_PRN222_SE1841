@@ -1,0 +1,15 @@
+﻿@{
+    ViewData["Title"] = "View CV";
+    var base64 = ViewBag.FileBase64 as string;
+}
+
+<h2>CV Preview</h2>
+
+@if (!string.IsNullOrEmpty(base64))
+{
+    <embed src="data:application/pdf;base64,@base64" width="100%" height="800px" type="application/pdf" />
+}
+else
+{
+    <p>No CV found.</p>
+}
