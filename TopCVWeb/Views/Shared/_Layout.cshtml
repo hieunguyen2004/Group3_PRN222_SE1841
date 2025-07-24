@@ -35,16 +35,25 @@
                         }
                         @if (!string.IsNullOrEmpty(username))
                         {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark">Hello, @username</a>
-                            </li>
-                            <li class="nav-item">
-                                <form method="post" asp-controller="Auth" asp-action="Logout" class="d-inline">
-                                    @Html.AntiForgeryToken()
-                                    <button type="submit" class="nav-link btn btn-link text-dark" style="text-decoration: none;">Logout</button>
-                                </form>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle text-dark" href="#" id="userDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                                    Hello, @username
+                                </a>
+                                <ul class="dropdown-menu" aria-labelledby="userDropdown">
+                                    <li><a class="dropdown-item" href="/Profile">Profile</a></li>
+                                    <li><a class="dropdown-item" href="/CV/List">My Applications</a></li>
+                                    <li><a class="dropdown-item" href="/Job/SavedJobs">Follows</a></li>
+                                    <li>
+                                        <form method="post" asp-controller="Auth" asp-action="Logout" class="dropdown-item m-0 p-0">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-link dropdown-item">Logout</button>
+                                        </form>
+                                    </li>
+                                </ul>
                             </li>
                         }
+
+
                         else
                         {
                             <li class="nav-item">

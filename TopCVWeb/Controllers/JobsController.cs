@@ -76,7 +76,8 @@ namespace TopCVWeb.Controllers
                     CvId = a.CvId ?? 0,
                     FullName = a.Cv.Seeker.User.Lastname,
                     SubmitDate = a.SubmitDate,
-                    Status = a.Cv.CvStatus
+                    Status = a.Cv.CvStatus,
+                    Email = a.Cv?.Seeker?.User?.Email
                 }).ToList();
 
             ViewBag.JobId = jobId;
@@ -164,18 +165,33 @@ namespace TopCVWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult ConfirmCV(int cvId)
+        public IActionResult ConfirmCV(int cvId, string email, int appId)
         {
-            _cv2Service.ConfirmCv(cvId);
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
+            {
+                TempData["Error"] = "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại.";
+                return RedirectToAction("Login", "Auth");
+            }
+
+            _cv2Service.ConfirmCv(cvId, email,appId,userId.Value); 
 
             TempData["Message"] = "CV has been confirmed as applied.";
             return Redirect(Request.Headers["Referer"].ToString());
         }
 
+
         [HttpGet]
-        public IActionResult RejectCv(int cvId)
+        public IActionResult RejectCv(int cvId, string email, int appId)
         {
-            _cv2Service.RejectCv(cvId);
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
+            {
+                TempData["Error"] = "Phiên đăng nhập đã hết. Vui lòng đăng nhập lại.";
+                return RedirectToAction("Login", "Auth");
+            }
+
+            _cv2Service.RejectCv(cvId, email, appId, userId.Value);
 
             TempData["Message"] = "CV has been confirmed as applied.";
             return Redirect(Request.Headers["Referer"].ToString());

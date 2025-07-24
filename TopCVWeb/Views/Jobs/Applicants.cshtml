@@ -32,12 +32,12 @@
                     }
                     else
                     {
-                        <a asp-action="ConfirmCV" asp-route-cvId="@applicant.CvId"
+                        <a asp-action="ConfirmCV" asp-route-cvId="@applicant.CvId" asp-route-email="@applicant.Email" asp-route-appId="@applicant.ApplicationId"
                            class="btn btn-sm btn-primary"
                            onclick="return confirm('Bạn có chắc muốn duyệt CV này?');">
                             Duyệt
                         </a>
-                        <a asp-action="RejectCV" asp-route-cvId="@applicant.CvId"
+                        <a asp-action="RejectCV" asp-route-cvId="@applicant.CvId" asp-route-email="@applicant.Email" asp-route-appId="@applicant.ApplicationId"
                            class="btn btn-sm btn-danger"
                            onclick="return confirm('Bạn có chắc muốn từ chối CV này?');">
                             Từ chối

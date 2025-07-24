@@ -44,5 +44,27 @@ namespace Repository
                 .Where(a => a.JobId == jobId)
                 .ToList();
         }
+
+        public Job? GetJobByApplicationId(int applicationId)
+        {
+            return _context.Applications
+       .Include(a => a.Job) 
+       .Where(a => a.ApplicationId == applicationId)
+       .Select(a => a.Job)
+       .FirstOrDefault();
+        }
+        public Company? GetCompanyByRecruiterId(int recruiterId)
+        {
+            return _context.Recruiters
+                .Include(r => r.Company)
+                .Where(r => r.RecruiterId == recruiterId)
+                .Select(r => r.Company)
+                .FirstOrDefault();
+        }
+        public int GetRecruiterIdFromUserId(int userId)
+        {
+            var recruiter = _context.Recruiters.FirstOrDefault(r => r.UserId == userId);
+            return recruiter?.RecruiterId ?? 0;
+        }
     }
 }

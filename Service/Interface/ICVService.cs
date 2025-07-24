@@ -15,9 +15,9 @@ namespace Service.Interface
         bool ExistsByContent(byte[] content);
         List<Cv> GetCVsBySeekerId(int seekerId);
 
-        void ConfirmCv(int cvId);
+        void ConfirmCv(int cvId,string email, int appId, int userId);
 
-        void RejectCv(int cvId);
+        void RejectCv(int cvId,string email, int appId, int userId);
 
     }
 }

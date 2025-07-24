@@ -11,5 +11,10 @@ namespace Repository.Interface
     {
        Application AddApplication(int jobId, int cvId);
         List<Application> GetApplicantsByJobId(int jobId);
+
+        Job? GetJobByApplicationId(int applicationId);
+        Company? GetCompanyByRecruiterId(int recruiterId);
+
+        int GetRecruiterIdFromUserId(int userId);
     }
 }
