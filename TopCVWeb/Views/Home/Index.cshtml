@@ -1,19 +1,103 @@
-﻿@{
-    ViewData["Title"] = "Home Page";
+﻿@model TopCVWeb.ViewModels.HomeViewModel
+@{
+    ViewData["Title"] = "Danh sách việc làm";
 }
-<style>
-    .header{
-        background: linear-gradient(180deg,#002b33,rgba(0,43,51,.25)),linear-gradient(90deg,#008060 21.86%,#2bab60 78.13%);
-        min-height: 100px;
-        min-width: 100%;
-    }
-</style>
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
-    <p>
 
-    </p>
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-9">
+            <h2>@ViewData["Title"]</h2>
+            <hr />
+            <div id="job-list-container">
+                @foreach (var job in Model.Jobs)
+                {
+                    <div class="card mb-3 job-card" id="job-card-@job.JobId">
+                        <div class="row g-0">
+                            <div class="col-md-2 d-flex align-items-center justify-content-center p-2">
+                                <img src="@(job.LogoCompany ?? "/images/default-logo.png")" class="img-fluid rounded-start" alt="Company Logo">
+                            </div>
+                            <div class="col-md-10">
+                                <div class="card-body">
+                                    <div class="d-flex justify-content-between">
+                                        <h5 class="card-title mb-1">@job.JobTitle</h5>
+                                        <a href="#" class="btn-toggle-save @(job.IsSaved ? "saved" : "")" data-jobid="@job.JobId" title="@(job.IsSaved ? "Bỏ theo dõi" : "Theo dõi")">
+                                            <i class="fa-@(job.IsSaved ? "solid" : "regular") fa-bookmark"></i>
+                                        </a>
+                                    </div>
+                                    <h6 class="card-subtitle mb-2 text-muted">@job.CompanyName</h6>
+                                    <div class="card-text text-danger fw-bold">
+                                        <i class="fa-solid fa-dollar-sign"></i> @job.Salary
+                                    </div>
+                                    <div class="card-text text-muted small">
+                                        <i class="fa-solid fa-location-dot"></i> @job.Location
+                                    </div>
+                                    <a asp-controller="Job" asp-action="Detail" asp-route-id="@job.JobId" class="btn btn-primary btn-sm mt-2">Xem chi tiết</a>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <nav>
+                @{
+                    var prevDisabled = !Model.Jobs.HasPreviousPage ? "disabled" : "";
+                    var nextDisabled = !Model.Jobs.HasNextPage ? "disabled" : "";
+                }
+                <ul class="pagination">
+                    <li class="page-item @prevDisabled">
+                        <a class="page-link" asp-action="Index"
+                           asp-route-pageIndex="@(Model.Jobs.PageIndex - 1)"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-searchTitle="@Model.SearchTitle"
+                           asp-route-categoryId="@Model.CategoryId"
+                           asp-route-companyId="@Model.CompanyId">Trước</a>
+                    </li>
+                    <li class="page-item @nextDisabled">
+                        <a class="page-link" asp-action="Index"
+                           asp-route-pageIndex="@(Model.Jobs.PageIndex + 1)"
+                           asp-route-pageSize="@Model.PageSize"
+                           asp-route-searchTitle="@Model.SearchTitle"
+                           asp-route-categoryId="@Model.CategoryId"
+                           asp-route-companyId="@Model.CompanyId">Sau</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+
+        <div class="col-md-3">
+            <div class="card">
+                <div class="card-header">
+                    <h5 class="mb-0">Bộ lọc</h5>
+                </div>
+                <div class="card-body">
+                    <form asp-action="Index" method="get">
+                        <div class="mb-3">
+                            <label class="form-label">Tên công việc</label>
+                            <input type="text" name="searchTitle" value="@Model.SearchTitle" class="form-control" />
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Ngành nghề</label>
+                            <select name="categoryId" class="form-select" asp-items="@(new SelectList(Model.Categories, "CategoryId", "CategoryName", Model.CategoryId))">
+                                <option value="">Tất cả</option>
+                            </select>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label">Công ty</label>
+                            <select name="companyId" class="form-select" asp-items="@(new SelectList(Model.Companies, "CompanyId", "CompanyName", Model.CompanyId))">
+                                <option value="">Tất cả</option>
+                            </select>
+                        </div>
+                        <div class="d-grid">
+                            <button type="submit" class="btn btn-primary">Lọc</button>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
-<div class="header">
-</div>
+
+@section Scripts {
+    <script src="~/js/saveJob.js"></script>
+}

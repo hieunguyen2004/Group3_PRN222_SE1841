@@ -14,15 +14,27 @@ builder.Logging.ClearProviders();
 builder.Logging.AddLog4Net(log4NetConfigPath);
 
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSession();
 
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
 
 builder.Services.AddScoped<ICVRepository, CVRepository>();
-builder.Services.AddScoped<ICVService, CVService>();
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ISaveJobRepository, SaveJobRepository>();
+builder.Services.AddScoped<IJobSeekerRepository, JobSeekerRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+builder.Services.AddScoped<ICVService, CVService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJobSeekerService, JobSeekerService>();
 
 
 

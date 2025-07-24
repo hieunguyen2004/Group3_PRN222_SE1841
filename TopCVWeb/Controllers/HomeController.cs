@@ -1,4 +1,5 @@
 using Microsoft.AspNetCore.Mvc;
+using Service.Interface;
 using System.Diagnostics;
 using TopCVWeb.Models;
 
@@ -7,15 +8,27 @@ namespace TopCVWeb.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
+        private readonly IJobService _jobService;
+        private readonly IJobSeekerService _jobSekkerService;
 
-        public HomeController(ILogger<HomeController> logger)
+        public HomeController(ILogger<HomeController> logger, IJobService jobService, IJobSeekerService jobSekkerService)
         {
             _logger = logger;
+            _jobService = jobService;
+            _jobSekkerService = jobSekkerService;
         }
 
-        public IActionResult Index()
+        public async Task<IActionResult> Index(string? searchTitle, int? categoryId, int? companyId, int pageIndex = 1, int pageSize = 10)
         {
-            return View();
+            var seekerId = await GetCurrentSeekerIdAsync();
+            var viewModel = await _jobService.GetHomeViewModelAsync(searchTitle, categoryId, companyId, pageIndex, pageSize, seekerId);
+            return View(viewModel);
+        }
+
+        private async Task<int?> GetCurrentSeekerIdAsync()
+        {
+            var userIdString = HttpContext.Session.GetInt32("userId");
+            return await _jobSekkerService.GetSeekerIdFromUserIdAsync(userIdString);
         }
 
         public IActionResult Privacy()
