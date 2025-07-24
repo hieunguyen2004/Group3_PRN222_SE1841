@@ -14,13 +14,13 @@ namespace Service
         private readonly IUserRepository _repo;
         private readonly MyDbContext _context;
 
-        
 
-        //public UserService(IUserRepository repo)
-        //{
-        //    _repo = repo;
-        //    _context = context;
-        //}
+
+        public UserService(IUserRepository repo, MyDbContext context)
+        {
+            _repo = repo;
+            _context = context;
+        }
 
         public bool Register(User user, string rawPassword, string role, out string error)
         {

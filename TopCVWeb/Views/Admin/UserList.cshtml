@@ -24,13 +24,17 @@
             <tbody>
                 @if (Model.Any())
                 {
-                    foreach (var user in Model)
+                    @foreach (var user in Model)
                     {
-                        var status = user.Status?.ToLower() ?? "inactive";
-                        var badgeClass = status == "active" ? "bg-success" : "bg-danger";
-                        var nextStatus = status == "active" ? "Inactive" : "Active";
-                        var buttonLabel = status == "active" ? "Inactive" : "Active";
-                        var icon = status == "active" ? "bi-lock" : "bi-unlock";
+                        var rawStatus = user.Status?.ToLower();
+                        var status = rawStatus ?? "pending";
+
+                        var badgeClass = status switch
+                        {
+                            "active" => "bg-success",
+                            "inactive" => "bg-danger",
+                            _ => "bg-warning text-dark" // cho "pending"
+                        };
 
                         <tr class="text-center">
                             <td>@user.UserId</td>
@@ -38,19 +42,44 @@
                             <td>@user.Email</td>
                             <td><span class="badge bg-secondary">@user.RoleId</span></td>
                             <td>
-                                <span class="badge @badgeClass px-3 py-2">@user.Status</span>
+                                <span class="badge @badgeClass px-3 py-2 text-uppercase">@status</span>
                             </td>
                             <td>
-                                <form asp-action="ChangeStatus" method="post" class="d-inline">
-                                    <input type="hidden" name="id" value="@user.UserId" />
-                                    <input type="hidden" name="newStatus" value="@nextStatus" />
-                                    <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill">
-                                        <i class="bi @icon me-1"></i> @buttonLabel
-                                    </button>
-                                </form>
+                                @if (status == "pending")
+                                {
+                                    <form asp-action="ChangeStatus" method="post" class="d-inline me-2">
+                                        <input type="hidden" name="id" value="@user.UserId" />
+                                        <input type="hidden" name="newStatus" value="Active" />
+                                        <button type="submit" class="btn btn-sm btn-outline-success rounded-pill">
+                                            <i class="bi bi-unlock me-1"></i> Active
+                                        </button>
+                                    </form>
+                                    <form asp-action="ChangeStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@user.UserId" />
+                                        <input type="hidden" name="newStatus" value="Inactive" />
+                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
+                                            <i class="bi bi-lock me-1"></i> Inactive
+                                        </button>
+                                    </form>
+                                }
+                                else
+                                {
+                                    var nextStatus = status == "active" ? "Inactive" : "Active";
+                                    var icon = status == "active" ? "bi-lock" : "bi-unlock";
+                                    var btnClass = status == "active" ? "btn-outline-danger" : "btn-outline-success";
+
+                                    <form asp-action="ChangeStatus" method="post" class="d-inline">
+                                        <input type="hidden" name="id" value="@user.UserId" />
+                                        <input type="hidden" name="newStatus" value="@nextStatus" />
+                                        <button type="submit" class="btn btn-sm @btnClass rounded-pill">
+                                            <i class="bi @icon me-1"></i> @nextStatus
+                                        </button>
+                                    </form>
+                                }
                             </td>
                         </tr>
                     }
+
                 }
                 else
                 {
