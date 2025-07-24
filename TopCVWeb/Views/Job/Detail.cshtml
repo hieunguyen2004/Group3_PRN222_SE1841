@@ -1,0 +1,82 @@
+﻿@model TopCVWeb.ViewModels.JobDetailViewModel
+@{
+    ViewData["Title"] = Model.JobTitle;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center mb-3">
+                <img src="@(Model.Company.LogoCompany ?? "/images/default-logo.png")" style="width: 80px; height: 80px;" class="me-3" />
+                <div>
+                    <h1>@Model.JobTitle</h1>
+                    <h4 class="text-muted">@Model.Company.CompanyName</h4>
+                </div>
+            </div>
+
+            <button id="toggleSaveBtn" class="btn @(Model.IsSaved ? "btn-success" : "btn-outline-success")" data-jobid="@Model.JobId">
+                <i class="fa-@(Model.IsSaved ? "solid" : "regular") fa-bookmark"></i>
+                @(Model.IsSaved ? "Đã theo dõi" : "Theo dõi công việc")
+            </button>
+            <hr />
+
+            <h4>Mô tả công việc</h4>
+            <p>@Html.Raw(Model.JobDescription)</p>
+
+            <h4>Yêu cầu ứng viên</h4>
+            <p>@Html.Raw(Model.Requirements)</p>
+
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header">Việc làm cùng ngành nghề</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var job in Model.SameCategoryJobs)
+                    {
+                        <a asp-action="Detail" asp-route-id="@job.JobId" class="list-group-item list-group-item-action">@job.JobTitle</a>
+                    }
+                </ul>
+            </div>
+
+            <div class="card">
+                <div class="card-header">Việc làm khác tại @Model.Company.CompanyName</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var job in Model.SameCompanyJobs)
+                    {
+                        <a asp-action="Detail" asp-route-id="@job.JobId" class="list-group-item list-group-item-action">@job.JobTitle</a>
+                    }
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    <script>
+        $(document).ready(function() {
+            $('#toggleSaveBtn').click(function() {
+                var button = $(this);
+                var jobId = button.data('jobid');
+
+                $.post('@Url.Action("ToggleSave", "Job")', { jobId: jobId }, function(response) {
+                    if (response.success) {
+                        if (response.saved) {
+                            button.removeClass('btn-outline-success').addClass('btn-success');
+                            button.html('<i class="fa-solid fa-bookmark"></i> Đã theo dõi');
+                        } else {
+                            button.removeClass('btn-success').addClass('btn-outline-success');
+                            button.html('<i class="fa-regular fa-bookmark"></i> Theo dõi công việc');
+                        }
+                    } else {
+                        if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            alert(response.message || 'Có lỗi xảy ra.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+}

@@ -14,11 +14,37 @@ namespace Repository
         private readonly MyDbContext _context;
 
         public JobSeekerRepository(MyDbContext context) {
-            _context = context; }
+            _context = context; 
+        }
 
         public JobSeeker GetJobSeekerByUser(int? userId)
         {
             return  _context.JobSeekers.FirstOrDefault(js => js.UserId == userId);
+        }
+
+        public async Task AddAsync(JobSeeker jobSeeker)
+        {
+            await _context.JobSeekers.AddAsync(jobSeeker);
+        }
+
+        public void Delete(JobSeeker jobSeeker)
+        {
+            _context.JobSeekers.Remove(jobSeeker);
+        }
+
+        public async Task<JobSeeker?> GetByIdAsync(int seekerId)
+        {
+            return await _context.JobSeekers.FindAsync(seekerId);
+        }
+
+        public async Task<JobSeeker?> GetByUserIdAsync(int userId)
+        {
+            return await _context.JobSeekers.FirstOrDefaultAsync(js => js.UserId == userId);
+        }
+
+        public void Update(JobSeeker jobSeeker)
+        {
+            _context.JobSeekers.Update(jobSeeker);
         }
     }
 }

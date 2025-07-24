@@ -40,7 +40,19 @@ builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
 builder.Services.AddScoped<IApplicationService, ApplicationService>();
 
 builder.Services.AddScoped<IUserRepository, UserRepository>();
+builder.Services.AddScoped<IJobRepository, JobRepository>();
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICompanyRepository, CompanyRepository>();
+builder.Services.AddScoped<ISaveJobRepository, SaveJobRepository>();
+builder.Services.AddScoped<IJobSeekerRepository, JobSeekerRepository>();
+builder.Services.AddScoped<IUnitOfWork, UnitOfWork>();
+
+
+builder.Services.AddScoped<ICVService, CVService>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJobService, JobService>();
+builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IJobSeekerService, JobSeekerService>();
 
 builder.Services.AddScoped<IJobSeekerService, JobSeekerService>();
 builder.Services.AddScoped<IJobSeekerRepository, JobSeekerRepository>();

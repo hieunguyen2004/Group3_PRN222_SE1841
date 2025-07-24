@@ -1,0 +1,24 @@
+﻿@model List<TopCVWeb.ViewModels.JobViewModel>
+@{
+    ViewData["Title"] = "Việc làm đã theo dõi";
+}
+
+<h1>@ViewData["Title"]</h1>
+
+@if (Model.Any())
+{
+    @foreach (var job in Model)
+    {
+        <div class="card mb-3">
+            <div class="card-body">
+                <h5 class="card-title">@job.JobTitle</h5>
+                <h6 class="card-subtitle mb-2 text-muted">@job.CompanyName</h6>
+                <a asp-controller="Job" asp-action="Detail" asp-route-id="@job.JobId" class="btn btn-primary">Xem chi tiết</a>
+            </div>
+        </div>
+    }
+}
+else
+{
+    <p>Bạn chưa theo dõi việc làm nào. Hãy bắt đầu <a asp-controller="Home" asp-action="Index">tìm kiếm</a> ngay!</p>
+}
