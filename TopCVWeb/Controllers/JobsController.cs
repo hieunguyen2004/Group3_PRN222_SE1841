@@ -15,12 +15,14 @@ namespace TopCVWeb.Controllers
         private readonly IRecruiterService _recruiterService;
         private readonly IApplicationService _applicationService;
         private readonly ICvService _cvService;
-        public JobsController(IJobsService jobsService, IRecruiterService recruiterService, IApplicationService applicationService, ICvService cvService)
+        private readonly ICVService _cv2Service;
+        public JobsController(IJobsService jobsService, IRecruiterService recruiterService, IApplicationService applicationService, ICvService cvService, ICVService cv2Service)
         {
             _jobsService = jobsService;
             _recruiterService = recruiterService;
             _applicationService = applicationService;
             _cvService = cvService;
+            _cv2Service = cv2Service;
         }
 
 
@@ -74,7 +76,7 @@ namespace TopCVWeb.Controllers
                     CvId = a.CvId ?? 0,
                     FullName = a.Cv.Seeker.User.Lastname,
                     SubmitDate = a.SubmitDate,
-                    Status = a.Status
+                    Status = a.Cv.CvStatus
                 }).ToList();
 
             ViewBag.JobId = jobId;
@@ -159,6 +161,24 @@ namespace TopCVWeb.Controllers
         {
             _jobsService.Delete(id);
             return RedirectToAction("MyJobs");
+        }
+
+        [HttpGet]
+        public IActionResult ConfirmCV(int cvId)
+        {
+            _cv2Service.ConfirmCv(cvId);
+
+            TempData["Message"] = "CV has been confirmed as applied.";
+            return Redirect(Request.Headers["Referer"].ToString());
+        }
+
+        [HttpGet]
+        public IActionResult RejectCv(int cvId)
+        {
+            _cv2Service.RejectCv(cvId);
+
+            TempData["Message"] = "CV has been confirmed as applied.";
+            return Redirect(Request.Headers["Referer"].ToString());
         }
     }
 }

@@ -1,17 +1,17 @@
 ﻿@using DAO.Models
 @model List<Cv>
 
-<h2>My CVs</h2>
+<h2>CV của tôi</h2>
 
 <table class="table">
     <thead>
         <tr>
             <th>#</th>
-            <th>CV File Name</th>
-            <th>Jobs</th>
-            <th>Submit Dates</th>
-            <th>Status</th>
-            <th>View</th>
+            <th>Tên File</th>
+            <th>Công việc</th>
+            <th>Ngày nộp</th>
+            <th>Trạng thái</th>
+            <th>Xem CV</th>
         </tr>
     </thead>
     <tbody>
@@ -59,7 +59,7 @@
                     <td>@cv.CvStatus</td>
                     <td>
                         <a asp-controller="CV" asp-action="ViewCV" asp-route-cvId="@cv.CvId" target="_blank" class="btn btn-sm btn-primary">
-                            View
+                            Xem
                         </a>
                     </td>
                 </tr>
@@ -78,9 +78,3 @@
 
 <hr />
 
-<h4>Upload New CV</h4>
-<form asp-controller="CV" asp-action="Upload" method="post" enctype="multipart/form-data">
-    
-    <input type="file" name="cvFile" accept=".pdf" required class="form-control mb-2" />
-    <button type="submit" class="btn btn-primary">Upload CV</button>
-</form>

@@ -20,11 +20,13 @@ public partial class Cv
     [StringLength(50)]
     public string? CvStatus { get; set; }
 
+    [Column("fileName")]
+    [StringLength(255)]
+    public string? FileName { get; set; }
+
     [Column("cvLink")]
     public byte[]? CvLink { get; set; }
 
-    [Column("fileName")]
-    public string? FileName { get; set; }
     [InverseProperty("Cv")]
     public virtual ICollection<Application> Applications { get; set; } = new List<Application>();
 

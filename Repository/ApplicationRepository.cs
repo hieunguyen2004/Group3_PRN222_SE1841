@@ -25,7 +25,7 @@ namespace Repository
                 CvId = cvId,          
                 JobId = jobId,               
                 SubmitDate = DateOnly.FromDateTime(DateTime.UtcNow),
-                Status = "Pending"
+                
             };
 
             _context.Applications.Add(application);

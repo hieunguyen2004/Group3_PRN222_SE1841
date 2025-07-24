@@ -9,6 +9,7 @@
             <th>Ngày nộp</th>
             <th>Trạng thái</th>
             <th>CV</th>
+            <th>Duyệt CV</th>
         </tr>
     </thead>
     <tbody>
@@ -19,11 +20,31 @@
                 <td>@applicant.SubmitDate?.ToString("dd/MM/yyyy")</td>
                 <td>@applicant.Status</td>
                 <td>
-                    <a class="btn btn-sm btn-info"
-                       asp-action="ViewCv"
-                       asp-route-cvId="@applicant.CvId"
-                       target="_blank">Xem CV</a>
+                    <a asp-controller="CV" asp-action="ViewCV" asp-route-cvId="@applicant.CvId" target="_blank"  class="btn btn-sm btn-primary">
+                            Xem
+                        </a>
                 </td>
+                <td>
+                    @if (applicant.Status == "Applied" || applicant.Status == "Rejected")
+                    {
+                        <button class="btn btn-sm btn-secondary" disabled>Duyệt</button>
+                        <button class="btn btn-sm btn-secondary" disabled>Từ chối</button>
+                    }
+                    else
+                    {
+                        <a asp-action="ConfirmCV" asp-route-cvId="@applicant.CvId"
+                           class="btn btn-sm btn-primary"
+                           onclick="return confirm('Bạn có chắc muốn duyệt CV này?');">
+                            Duyệt
+                        </a>
+                        <a asp-action="RejectCV" asp-route-cvId="@applicant.CvId"
+                           class="btn btn-sm btn-danger"
+                           onclick="return confirm('Bạn có chắc muốn từ chối CV này?');">
+                            Từ chối
+                        </a>
+                    }
+                </td>
+                
             </tr>
         }
     </tbody>
