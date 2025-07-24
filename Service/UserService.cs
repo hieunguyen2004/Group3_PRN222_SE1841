@@ -41,21 +41,7 @@ namespace Service
                 user.Password = PasswordHasher.HashPassword(rawPassword);
                 _repo.Add(user);
 
-                if (role == "jobseeker")
-                {
-                    var jobSeeker = new JobSeeker
-                    {
-                        UserId = user.UserId,
-                        Industry = "",
-                        Experience = "",
-                        Position = "",
-                        Profession = "",
-                        Location = "",
-                        Salary = ""
-                    };
-                    _context.JobSeekers.Add(jobSeeker);
-                }
-                else if (role == "recruiter")
+                if (role == "recruiter")
                 {
                     var recruiter = new Recruiter
                     {
