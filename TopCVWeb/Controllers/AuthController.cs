@@ -1,28 +1,32 @@
 ﻿using DAO.Models;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
+using TopCVWeb.Models;
 
 namespace TopCVWeb.Controllers
 {
     public class AuthController : Controller
     {
-        private readonly IUserService _service;
+        private readonly IUserService _userService;
 
         public AuthController(IUserService service)
         {
-            _service = service;
+            _userService = service;
         }
 
         [HttpGet]
         public IActionResult Register() => View();
 
-        [HttpPost]
         public IActionResult Register(User user, string rawPassword)
         {
-            if (_service.Register(user, rawPassword))
-                return RedirectToAction("Login");
-            ModelState.AddModelError("", "Tài khoản đã tồn tại!");
-            return View(user);
+            string role = "jobseeker";
+            if (!_userService.Register(user, rawPassword, role, out string error))
+            {
+                ViewBag.Error = error;
+                return View(user); 
+            }
+
+            return RedirectToAction("Login");
         }
 
         [HttpGet]
@@ -31,7 +35,7 @@ namespace TopCVWeb.Controllers
         [HttpPost]
         public IActionResult Login(string username, string password)
         {
-            var user = _service.Login(username, password);
+            var user = _userService.Login(username, password);
             if (user == null)
             {
                 ModelState.AddModelError("", "Sai tài khoản hoặc mật khẩu");
@@ -45,20 +49,27 @@ namespace TopCVWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult ForgetPassword() => View();
+        public IActionResult ForgotPassword() => View(); 
 
         [HttpPost]
-        public IActionResult ForgetPassword(string email)
+        public IActionResult ForgotPassword(ForgotPasswordViewModel model)
         {
-            var token = _service.GenerateResetToken(email);
-            if (token == null)
+            if (!ModelState.IsValid) return View(model);
+
+            var user = _userService.GetUserByEmail(model.Email);
+            if (user == null)
             {
-                ModelState.AddModelError("", "Không tìm thấy email.");
-                return View();
+                ModelState.AddModelError("", "Email không tồn tại.");
+                return View(model);
             }
 
-            // TODO: Gửi email với link chứa token
-            return View("CheckEmail");
+            string token = _userService.GenerateResetToken(model.Email);
+            string resetLink = Url.Action("ResetPassword", "Auth", new { token = token }, Request.Scheme);
+
+            _userService.SendResetPasswordEmail(user.Email, resetLink);
+
+            ViewBag.Message = "Email đặt lại mật khẩu đã được gửi.";
+            return View();
         }
 
         [HttpGet]
@@ -71,10 +82,21 @@ namespace TopCVWeb.Controllers
         [HttpPost]
         public IActionResult ResetPassword(string token, string newPassword)
         {
-            if (_service.ResetPassword(token, newPassword))
+            if (_userService.ResetPassword(token, newPassword))
                 return RedirectToAction("Login");
+
             ModelState.AddModelError("", "Token không hợp lệ hoặc đã hết hạn.");
+
+            ViewBag.Token = token; 
             return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public IActionResult Logout()
+        {
+            HttpContext.Session.Clear(); // Xóa toàn bộ session
+            return RedirectToAction("Login", "Auth");
         }
     }
 }

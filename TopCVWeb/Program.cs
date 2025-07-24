@@ -29,6 +29,7 @@ builder.Logging.AddLog4Net(log4NetConfigPath);
 builder.Services.AddControllersWithViews();
 
 builder.Services.AddSession();
+builder.Services.AddHttpContextAccessor();
 
 builder.Services.AddDbContext<MyDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("MyCnn")));
@@ -120,6 +121,7 @@ app.UseStaticFiles();
 
 app.UseRouting();
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllerRoute(
