@@ -14,6 +14,7 @@ using Repository.Recruiters;
 
 using Service.Cvs;
 using Service.Jobs;
+using Service.Recruiters;
 
 
 
@@ -51,7 +52,7 @@ builder.Services.AddScoped<IJobsService, JobsService>();
 builder.Services.AddScoped<IJobsRepository, JobsRepository>();
 
 builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
-//builder.Services.AddScoped<IRecruiterService, RecruiterService>();
+builder.Services.AddScoped<IRecruiterService, RecruiterService>();
 
 
 

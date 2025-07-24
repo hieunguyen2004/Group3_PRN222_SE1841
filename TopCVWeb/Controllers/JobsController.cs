@@ -1,7 +1,7 @@
 ﻿using DAO.Models;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Service.Applications;
+using Service.Interface;
 using Service.Cvs;
 using Service.Jobs;
 using Service.Recruiters;
