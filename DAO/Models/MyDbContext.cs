@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Configuration;
 
 namespace DAO.Models;
 
@@ -34,7 +35,7 @@ public partial class MyDbContext : DbContext
     public virtual DbSet<TokenForgetPassword> TokenForgetPasswords { get; set; }
 
     public virtual DbSet<User> Users { get; set; }
-
+    
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
         modelBuilder.Entity<Application>(entity =>

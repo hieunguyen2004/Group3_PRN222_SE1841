@@ -7,31 +7,74 @@
     <thead>
         <tr>
             <th>#</th>
-            <th>CV Title</th>
+            <th>CV File Name</th>
+            <th>Jobs</th>
+            <th>Submit Dates</th>
             <th>Status</th>
-          
+            <th>View</th>
         </tr>
     </thead>
     <tbody>
         @if (Model.Any())
         {
-            int index = 1;
+           
             foreach (var cv in Model)
             {
                 <tr>
-                    <td>@index</td>
+                    <td>@cv.CvId</td>
+                    <td>@cv.FileName</td>
+
+                    <td>
+                        @if (cv.Applications != null && cv.Applications.Any())
+                        {
+                          
+                                @foreach (var app in cv.Applications)
+                                {
+                                    @app.Job.JobTitle
+                                }
+                           
+                        }
+                        else
+                        {
+                            <span>No Applications</span>
+                        }
+                    </td>
+
+                    <td>
+                        @if (cv.Applications != null && cv.Applications.Any())
+                        {
+                          
+                                @foreach (var app in cv.Applications)
+                                {
+                                    @app.SubmitDate
+                                }
+                           
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+
                     <td>@cv.CvStatus</td>
-                    
+                    <td>
+                        <a asp-controller="CV" asp-action="ViewCV" asp-route-cvId="@cv.CvId" target="_blank" class="btn btn-sm btn-primary">
+                            View
+                        </a>
+                    </td>
                 </tr>
-                index++;
+                
             }
         }
         else
         {
-            <tr><td colspan="3">No CVs uploaded yet.</td></tr>
+            <tr><td colspan="5">No CVs uploaded yet.</td></tr>
         }
+    
+
     </tbody>
 </table>
+
 
 <hr />
 

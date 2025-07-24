@@ -34,9 +34,15 @@ builder.Services.AddDbContext<MyDbContext>(options =>
 
 builder.Services.AddScoped<ICVRepository, CVRepository>();
 builder.Services.AddScoped<ICVService, CVService>();
+
+builder.Services.AddScoped<IApplicationRepository, ApplicationRepository>();
+builder.Services.AddScoped<IApplicationService, ApplicationService>();
+
 builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
+builder.Services.AddScoped<IJobSeekerService, JobSeekerService>();
+builder.Services.AddScoped<IJobSeekerRepository, JobSeekerRepository>();
 
 
 
