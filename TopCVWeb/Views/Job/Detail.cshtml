@@ -26,8 +26,26 @@
             <p>@Html.Raw(Model.JobDescription)</p>
 
             <h4>Yêu cầu ứng viên</h4>
+            <ul>
+                <li><strong>Kinh nghiệm:</strong> @Model.Experience</li>
+                <li><strong>Kỹ năng:</strong> @Model.Skills</li>
+                <li><strong>Giới tính:</strong> @Model.Gender</li>
+                <li><strong>Chuyên ngành:</strong> @Model.Profession</li>
+            </ul>
             <p>@Html.Raw(Model.Requirements)</p>
 
+            <h4>Thông tin chi tiết</h4>
+            <ul>
+                <li><strong>Hình thức làm việc:</strong> @Model.JobType</li>
+                <li><strong>Thời gian làm việc:</strong> @Model.WorkingTime</li>
+                <li><strong>Vị trí:</strong> @Model.Position</li>
+                <li><strong>Địa điểm:</strong> @Model.Location</li>
+                <li><strong>Mức lương:</strong> @Model.Salary</li>
+                <li><strong>Số lượng tuyển:</strong> @Model.NumberOfSeeker</li>
+                <li><strong>Ngày đăng:</strong> @Model.CreateDate.ToString("dd/MM/yyyy")</li>
+                <li><strong>Hạn nộp hồ sơ:</strong> @Model.EndDate.ToString("dd/MM/yyyy")</li>
+                <li><strong>Trạng thái:</strong> @(Model.EndDate < DateOnly.FromDateTime(DateTime.Now) ? "Hết hạn" : "Đang tuyển")</li>
+            </ul>
         </div>
 
         <div class="col-md-4">
@@ -41,7 +59,7 @@
                 </ul>
             </div>
 
-            <div class="card">
+            <div class="card mb-3">
                 <div class="card-header">Việc làm khác tại @Model.Company.CompanyName</div>
                 <ul class="list-group list-group-flush">
                     @foreach (var job in Model.SameCompanyJobs)
@@ -49,6 +67,16 @@
                         <a asp-action="Detail" asp-route-id="@job.JobId" class="list-group-item list-group-item-action">@job.JobTitle</a>
                     }
                 </ul>
+            </div>
+
+            <!-- ✅ Bổ sung logo công ty nếu cần -->
+            <div class="card mb-3">
+                <div class="card-header">Thông tin công ty</div>
+                <div class="card-body text-center">
+                    <img src="@(Model.Company.LogoCompany ?? "/images/default-logo.png")" alt="Logo" class="mb-2" style="max-width: 100px;" />
+                    <h5>@Model.Company.CompanyName</h5>
+                    <p>@Model.Company.Address</p>
+                </div>
             </div>
         </div>
     </div>
@@ -92,12 +120,12 @@
 
 @section Scripts {
     <script>
-        $(document).ready(function() {
-            $('#toggleSaveBtn').click(function() {
+        $(document).ready(function () {
+            $('#toggleSaveBtn').click(function () {
                 var button = $(this);
                 var jobId = button.data('jobid');
 
-                $.post('@Url.Action("ToggleSave", "Job")', { jobId: jobId }, function(response) {
+                $.post('@Url.Action("ToggleSave", "Job")', { jobId: jobId }, function (response) {
                     if (response.success) {
                         if (response.saved) {
                             button.removeClass('btn-outline-success').addClass('btn-success');
