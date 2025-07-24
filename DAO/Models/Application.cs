@@ -22,10 +22,6 @@ public partial class Application
     [Column("submitDate")]
     public DateOnly? SubmitDate { get; set; }
 
-    [Column("status")]
-    [StringLength(50)]
-    public string? Status { get; set; }
-
     [ForeignKey("CvId")]
     [InverseProperty("Applications")]
     public virtual Cv? Cv { get; set; }

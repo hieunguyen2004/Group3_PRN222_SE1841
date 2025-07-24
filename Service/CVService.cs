@@ -36,6 +36,14 @@ namespace Service
             return  _cvRepository.GetCVsBySeekerId(seekerId);
         }
 
+        public void ConfirmCv(int cvId)
+        {
+            _cvRepository.ConfirmCv(cvId);
+        }
 
+        public void RejectCv(int cvId)
+        {
+            _cvRepository.RejectCv(cvId);
+        }
     }
 }

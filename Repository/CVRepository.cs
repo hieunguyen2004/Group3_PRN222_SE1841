@@ -42,6 +42,25 @@ namespace Repository
                 .OrderByDescending(cv => cv.CvId)
                 .ToList();
         }
+
+        public void ConfirmCv(int cvId)
+        {
+            var existingCv = _context.Cvs.Find(cvId);
+            if (existingCv == null) throw new Exception("CV not found");
+
+            existingCv.CvStatus = "Applied";
+            _context.SaveChanges();
+        }
+
+        public void RejectCv(int cvId)
+        {
+            var existingCv = _context.Cvs.Find(cvId);
+            if (existingCv == null) throw new Exception("CV not found");
+
+            existingCv.CvStatus = "Rejected";
+            _context.SaveChanges();
+        }
+
     }
 
 }

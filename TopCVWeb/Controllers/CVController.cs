@@ -24,13 +24,13 @@ namespace TopCVWeb.Controllers
             int? userId = HttpContext.Session.GetInt32("userId");
             if (userId == null)
             {
-                return Unauthorized(); // or RedirectToAction("Login")
+                return RedirectToAction("Login", "Auth");
             }
 
             var seeker =   _jobSeekerService.GetJobSeekerByUser(userId.Value);
             if (seeker == null)
             {
-                return Unauthorized();
+                return RedirectToAction("Login", "Auth");
             }
 
             var cvs =   _cvService.GetCVsBySeekerId(seeker.SeekerId);
@@ -40,12 +40,12 @@ namespace TopCVWeb.Controllers
 
 
         [HttpPost]
-        public IActionResult Upload(int seekerId, IFormFile cvFile)
+        public IActionResult Upload(int seekerId, IFormFile cvFile, int jobId)
         {
             int? userId = HttpContext.Session.GetInt32("userId");
             if (userId == null)
             {
-                return Unauthorized(); // or RedirectToAction("Login")
+                return RedirectToAction("Login", "Auth");
             }
             if (cvFile == null || cvFile.Length == 0)
             {
@@ -79,7 +79,7 @@ namespace TopCVWeb.Controllers
             };
 
               _cvService.AddCV(cv);
-              _applicationService.AddApplication(8, cv.CvId);
+              _applicationService.AddApplication(jobId, cv.CvId);
             
 
             TempData["Success"] = "CV uploaded and application submitted!";
