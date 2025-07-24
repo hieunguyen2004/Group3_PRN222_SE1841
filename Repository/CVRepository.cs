@@ -21,7 +21,7 @@ namespace Repository
         public  void Add(Cv cv)
         {
             _context.Cvs.Add(cv);
-            _context.SaveChangesAsync();
+            _context.SaveChanges();
         }
 
         public Cv GetById(int id)

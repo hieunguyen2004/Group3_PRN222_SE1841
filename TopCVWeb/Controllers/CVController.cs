@@ -67,12 +67,7 @@ namespace TopCVWeb.Controllers
                 fileBytes = memoryStream.ToArray();
             }
 
-            //bool exists =   _cvService.ExistsByContent(fileBytes);
-            //if (exists)
-            //{
-            //    TempData["Error"] = "This CV file already exists.";
-            //    return RedirectToAction("UploadForm");
-            //}
+            
 
             var seeker =   _jobSeekerService.GetJobSeekerByUser(userId.Value);
             var cv = new Cv

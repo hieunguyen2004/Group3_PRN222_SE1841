@@ -30,7 +30,7 @@ namespace Repository
 
             _context.Applications.Add(application);
         
-             _context.SaveChangesAsync();
+             _context.SaveChanges();
 
             return application;
 

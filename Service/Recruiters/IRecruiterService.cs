@@ -4,6 +4,6 @@ namespace Service.Recruiters
 {
     public interface IRecruiterService
     {
-        Recruiter? GetByUserId(int userId);
+        Recruiter? GetByUserId(int? userId);
     }
 }
