@@ -1,7 +1,9 @@
 ﻿using DAO.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.Mvc.Rendering;
 using Microsoft.EntityFrameworkCore;
 using Service.Applications;
+using Service.CategoryServices;
 using Service.Cvs;
 using Service.Jobs;
 using Service.Recruiters;
@@ -15,12 +17,16 @@ namespace TopCVWeb.Controllers
         private readonly IRecruiterService _recruiterService;
         private readonly IApplicationService _applicationService;
         private readonly ICvService _cvService;
-        public JobsController(IJobsService jobsService, IRecruiterService recruiterService, IApplicationService applicationService, ICvService cvService)
+        private readonly ICategoryService _categoryService;
+        public JobsController(IJobsService jobsService, IRecruiterService recruiterService,
+            IApplicationService applicationService, 
+            ICvService cvService, ICategoryService categoryService)
         {
             _jobsService = jobsService;
             _recruiterService = recruiterService;
             _applicationService = applicationService;
             _cvService = cvService;
+            _categoryService = categoryService;
         }
 
 
@@ -72,7 +78,7 @@ namespace TopCVWeb.Controllers
                     CvId = a.CvId ?? 0,
                     FullName = a.Cv.Seeker.User.Lastname,
                     SubmitDate = a.SubmitDate,
-                    Status = a.Status
+                    Status = a.Cv.CvStatus
                 }).ToList();
 
             ViewBag.JobId = jobId;
@@ -91,31 +97,58 @@ namespace TopCVWeb.Controllers
         // GET: Hiển thị form tạo mới
         public IActionResult Create()
         {
+            var categories = _categoryService.GetAll();
+
+            // Gửi sang View bằng ViewBag hoặc ViewData
+            ViewBag.Categories = categories
+                .Select(c => new SelectListItem
+                {
+                    Value = c.CategoryId.ToString(),
+                    Text = c.CategoryName
+                }).ToList();
+
             return View();
         }
 
         [HttpPost]
         public IActionResult Create(Job job)
         {
+            // Lấy UserId từ session
+            int? userId = HttpContext.Session.GetInt32("UserId");
+            if (userId == null)
+                return RedirectToAction("Login", "Account");
+
+            // Validate recruiter
+            var recruiter = _recruiterService.GetByUserId(userId.Value);
+            if (recruiter == null)
+            {
+                TempData["ErrorMessage"] = "Tài khoản của bạn chưa đăng ký thông tin nhà tuyển dụng.";
+                return RedirectToAction("MyJobs");
+            }
+
+            // Nếu CreateDate không nhập từ form → set mặc định hôm nay
+            job.CreateDate = DateOnly.FromDateTime(DateTime.Now);
+
+            // Kiểm tra ngày kết thúc
+            if (job.EndDate < job.CreateDate)
+            {
+                ModelState.AddModelError("EndDate", "Ngày kết thúc không được nhỏ hơn ngày tạo.");
+            }
+
             if (ModelState.IsValid)
             {
-                int userId = 1; // test tạm
+                try
+                {
+                    job.RecruiterId = recruiter.RecruiterId;
+                    _jobsService.Create(job);
 
-               // int? userId = HttpContext.Session.GetInt32("UserId");
-               // if (userId == null)
-               //     return RedirectToAction("Login", "Account");
-
-
-                // Lấy recruiter tương ứng với userId
-                var recruiter = _recruiterService.GetByUserId(userId);
-                if (recruiter == null)
-                    return Content("Không tìm thấy recruiter tương ứng.");
-
-                job.RecruiterId = recruiter.RecruiterId;
-                job.CreateDate = DateOnly.FromDateTime(DateTime.Now);
-
-                _jobsService.Create(job);
-                return RedirectToAction("MyJobs");
+                    TempData["SuccessMessage"] = "Đăng bài thành công!";
+                    return RedirectToAction("MyJobs");
+                }
+                catch (Exception ex)
+                {
+                    ModelState.AddModelError("", "Có lỗi khi lưu dữ liệu: " + ex.Message);
+                }
             }
 
             return View(job);

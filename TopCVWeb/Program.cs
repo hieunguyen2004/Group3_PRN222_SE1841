@@ -1,10 +1,12 @@
 using DAO.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository.Applications;
+using Repository.CategoryRepositorys;
 using Repository.Cvs;
 using Repository.Jobs;
 using Repository.Recruiters;
 using Service.Applications;
+using Service.CategoryServices;
 using Service.Cvs;
 using Service.Jobs;
 using Service.Recruiters;
@@ -27,6 +29,10 @@ builder.Services.AddScoped<IApplicationService, ApplicationService>();
 
 builder.Services.AddScoped<ICvRepository, CvRepository>();
 builder.Services.AddScoped<ICvService, CvService>();
+
+builder.Services.AddScoped<ICategoryRepository, CategoryRepository>();
+builder.Services.AddScoped<ICategoryService, CategoryService>();
+
 
 var app = builder.Build();
 
