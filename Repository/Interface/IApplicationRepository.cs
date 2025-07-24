@@ -10,5 +10,6 @@ namespace Repository.Interface
     public interface IApplicationRepository
     {
        Application AddApplication(int jobId, int cvId);
+        List<Application> GetApplicantsByJobId(int jobId);
     }
 }

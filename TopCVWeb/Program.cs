@@ -7,14 +7,14 @@ using Service;
 using Service.Interface;
 
 
-using Repository.Applications;
+
 using Repository.Cvs;
 using Repository.Jobs;
 using Repository.Recruiters;
-using Service.Applications;
+
 using Service.Cvs;
 using Service.Jobs;
-using Service.Recruiters;
+
 
 
 var builder = WebApplication.CreateBuilder(args);
@@ -51,7 +51,7 @@ builder.Services.AddScoped<IJobsService, JobsService>();
 builder.Services.AddScoped<IJobsRepository, JobsRepository>();
 
 builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
-builder.Services.AddScoped<IRecruiterService, RecruiterService>();
+//builder.Services.AddScoped<IRecruiterService, RecruiterService>();
 
 
 

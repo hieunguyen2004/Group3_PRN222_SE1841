@@ -23,5 +23,9 @@ namespace Service
         {
             return _applicationRepository.AddApplication(jobId, cvId);
         }
+        public List<Application> GetApplicantsByJobId(int jobId)
+        {
+            return _applicationRepository.GetApplicantsByJobId(jobId);
+        }
     }
 }

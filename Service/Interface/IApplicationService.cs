@@ -11,5 +11,6 @@ namespace Service.Interface
     public interface IApplicationService
     {
         Application AddApplication(int jobId, int cvId);
+        List<Application> GetApplicantsByJobId(int jobId);
     }
 }
