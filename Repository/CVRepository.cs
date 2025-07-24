@@ -18,29 +18,29 @@ namespace Repository
             _context = context;
         }
 
-        public async Task AddAsync(Cv cv)
+        public  void Add(Cv cv)
         {
             _context.Cvs.Add(cv);
-            await _context.SaveChangesAsync();
+            _context.SaveChangesAsync();
         }
 
-        public async Task<Cv> GetByIdAsync(int id)
+        public Cv GetById(int id)
         {
-            return await _context.Cvs.FindAsync(id);
+            return  _context.Cvs.Find(id);
         }
-        public async Task<bool> ExistsByContentAsync(byte[] content)
+        public  bool ExistsByContent(byte[] content)
         {
-            return await _context.Cvs
-                .AnyAsync(cv => cv.CvLink.SequenceEqual(content));
+            return  _context.Cvs
+                .Any(cv => cv.CvLink.SequenceEqual(content));
         }
-        public async Task<List<Cv>> GetCVsBySeekerIdAsync(int seekerId)
+        public  List<Cv> GetCVsBySeekerId(int seekerId)
         {
-            return await _context.Cvs
+            return  _context.Cvs
                 .Include(c=>c.Applications)
                 .ThenInclude(a=>a.Job)
                 .Where(cv => cv.SeekerId == seekerId)
                 .OrderByDescending(cv => cv.CvId)
-                .ToListAsync();
+                .ToList();
         }
     }
 

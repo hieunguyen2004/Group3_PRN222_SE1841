@@ -9,10 +9,10 @@ namespace Repository.Interface
 {
     public interface ICVRepository
     {
-        Task AddAsync(Cv cv);
-        Task<Cv> GetByIdAsync(int id);
-        Task<bool> ExistsByContentAsync(byte[] content);
-        Task<List<Cv>> GetCVsBySeekerIdAsync(int seekerId);
+       void Add(Cv cv);
+       Cv GetById(int id);
+       bool ExistsByContent(byte[] content);
+        List<Cv> GetCVsBySeekerId(int seekerId);
 
     }
 }

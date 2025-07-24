@@ -18,22 +18,22 @@ namespace Service
             _cvRepository = cvRepository;
         }
 
-        public async Task AddCVAsync(Cv cv) 
+        public void AddCV(Cv cv) 
         {
-            await _cvRepository.AddAsync(cv);
+            _cvRepository.Add(cv);
         }
 
-        public async Task<Cv> GetCVByIdAsync(int id)
+        public  Cv GetCVById(int id)
         {
-            return await _cvRepository.GetByIdAsync(id);
+            return  _cvRepository.GetById(id);
         }
-        public async Task<bool> ExistsByContentAsync(byte[] content)
+        public  bool ExistsByContent(byte[] content)
         {
-            return await _cvRepository.ExistsByContentAsync(content);
+            return  _cvRepository.ExistsByContent(content);
         }
-        public async Task<List<Cv>> GetCVsBySeekerIdAsync(int seekerId)
+        public  List<Cv> GetCVsBySeekerId(int seekerId)
         {
-            return await _cvRepository.GetCVsBySeekerIdAsync(seekerId);
+            return  _cvRepository.GetCVsBySeekerId(seekerId);
         }
 
 

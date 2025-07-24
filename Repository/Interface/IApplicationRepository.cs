@@ -9,6 +9,6 @@ namespace Repository.Interface
 {
     public interface IApplicationRepository
     {
-        Task <Application> AddApplication(int jobId, int cvId);
+       Application AddApplication(int jobId, int cvId);
     }
 }

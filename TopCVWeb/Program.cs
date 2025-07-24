@@ -53,8 +53,7 @@ builder.Services.AddScoped<IJobsRepository, JobsRepository>();
 builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
 builder.Services.AddScoped<IRecruiterService, RecruiterService>();
 
-builder.Services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
-builder.Services.AddScoped<IApplicationService, ApplicationService>();
+
 
 builder.Services.AddScoped<ICvRepository, CvRepository>();
 builder.Services.AddScoped<ICvService, CvService>();

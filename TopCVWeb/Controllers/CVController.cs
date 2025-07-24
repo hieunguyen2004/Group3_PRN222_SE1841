@@ -19,7 +19,7 @@ namespace TopCVWeb.Controllers
             _applicationService = applicationService;
             _jobSeekerService = jobSeekerService;
         }
-        public async Task<IActionResult> List()
+        public IActionResult List()
         {
             int? userId = HttpContext.Session.GetInt32("userId");
             if (userId == null)
@@ -27,20 +27,20 @@ namespace TopCVWeb.Controllers
                 return Unauthorized(); // or RedirectToAction("Login")
             }
 
-            var seeker = await _jobSeekerService.GetJobSeekerByUserAsync(userId.Value);
+            var seeker =   _jobSeekerService.GetJobSeekerByUser(userId.Value);
             if (seeker == null)
             {
                 return Unauthorized();
             }
 
-            var cvs = await _cvService.GetCVsBySeekerIdAsync(seeker.SeekerId);
+            var cvs =   _cvService.GetCVsBySeekerId(seeker.SeekerId);
 
             return View(cvs);
         }
 
 
         [HttpPost]
-        public async Task<IActionResult> Upload(int seekerId, IFormFile cvFile)
+        public IActionResult Upload(int seekerId, IFormFile cvFile)
         {
             int? userId = HttpContext.Session.GetInt32("userId");
             if (userId == null)
@@ -63,18 +63,18 @@ namespace TopCVWeb.Controllers
             byte[] fileBytes;
             using (var memoryStream = new MemoryStream())
             {
-                await cvFile.CopyToAsync(memoryStream);
+                 cvFile.CopyTo(memoryStream);
                 fileBytes = memoryStream.ToArray();
             }
 
-            //bool exists = await _cvService.ExistsByContentAsync(fileBytes);
+            //bool exists =   _cvService.ExistsByContent(fileBytes);
             //if (exists)
             //{
             //    TempData["Error"] = "This CV file already exists.";
             //    return RedirectToAction("UploadForm");
             //}
 
-            var seeker = await _jobSeekerService.GetJobSeekerByUserAsync(userId.Value);
+            var seeker =   _jobSeekerService.GetJobSeekerByUser(userId.Value);
             var cv = new Cv
             {
                 SeekerId =  seeker.SeekerId,
@@ -83,8 +83,8 @@ namespace TopCVWeb.Controllers
                 FileName = Path.GetFileName(cvFile.FileName)
             };
 
-            await _cvService.AddCVAsync(cv);
-            await _applicationService.AddApplication(8, cv.CvId);
+              _cvService.AddCV(cv);
+              _applicationService.AddApplication(8, cv.CvId);
             
 
             TempData["Success"] = "CV uploaded and application submitted!";
@@ -93,9 +93,9 @@ namespace TopCVWeb.Controllers
 
 
 
-        public async Task<IActionResult> ViewCV(int cvId)
+        public IActionResult ViewCV(int cvId)
         {
-            var cv = await _cvService.GetCVByIdAsync(cvId);
+            var cv =   _cvService.GetCVById(cvId);
             if (cv == null || cv.CvLink == null)
             {
                 return NotFound();

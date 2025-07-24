@@ -19,7 +19,7 @@ namespace Service
             _applicationRepository = applicationRepository;
         }
 
-        public Task<Application> AddApplication(int jobId, int cvId)
+        public Application AddApplication(int jobId, int cvId)
         {
             return _applicationRepository.AddApplication(jobId, cvId);
         }

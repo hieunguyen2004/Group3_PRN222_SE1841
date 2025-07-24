@@ -9,6 +9,6 @@ namespace Service.Interface
 {
     public  interface IJobSeekerService
     {
-        Task<JobSeeker> GetJobSeekerByUserAsync(int? userId);
+        JobSeeker GetJobSeekerByUser(int? userId);
     }
 }

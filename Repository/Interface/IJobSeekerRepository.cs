@@ -10,6 +10,6 @@ namespace Repository.Interface
     public interface IJobSeekerRepository
 
     {
-        Task<JobSeeker> GetJobSeekerByUserAsync(int? userId);
+        JobSeeker GetJobSeekerByUser(int? userId);
     }
 }

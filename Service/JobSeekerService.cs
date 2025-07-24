@@ -18,9 +18,9 @@ namespace Service
                 _repository = repository;
         }
 
-        public async Task<JobSeeker> GetJobSeekerByUserAsync(int? userId)
+        public JobSeeker GetJobSeekerByUser(int? userId)
         {
-           return await _repository.GetJobSeekerByUserAsync(userId);
+           return _repository.GetJobSeekerByUser(userId);
         }
     }
 }

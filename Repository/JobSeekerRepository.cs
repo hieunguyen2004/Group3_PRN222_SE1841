@@ -16,9 +16,9 @@ namespace Repository
         public JobSeekerRepository(MyDbContext context) {
             _context = context; }
 
-        public async Task<JobSeeker> GetJobSeekerByUserAsync(int? userId)
+        public JobSeeker GetJobSeekerByUser(int? userId)
         {
-            return await _context.JobSeekers.FirstOrDefaultAsync(js => js.UserId == userId);
+            return  _context.JobSeekers.FirstOrDefault(js => js.UserId == userId);
         }
     }
 }

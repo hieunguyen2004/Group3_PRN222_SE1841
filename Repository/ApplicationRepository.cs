@@ -17,7 +17,7 @@ namespace Repository
             _context = context;
         }
 
-        public async Task<Application> AddApplication(int jobId, int cvId)
+        public Application AddApplication(int jobId, int cvId)
         {
             var application = new Application
             {
@@ -29,7 +29,7 @@ namespace Repository
 
             _context.Applications.Add(application);
         
-            await _context.SaveChangesAsync();
+             _context.SaveChangesAsync();
 
             return application;
 
