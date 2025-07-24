@@ -114,12 +114,12 @@ namespace TopCVWeb.Controllers
         public IActionResult Create(Job job)
         {
             // Lấy UserId từ session
-            int? userId = HttpContext.Session.GetInt32("UserId");
-            if (userId == null)
-                return RedirectToAction("Login", "Account");
-
+            //  int? userId = HttpContext.Session.GetInt32("UserId");
+            //   if (userId == null)
+            //     return RedirectToAction("Login", "Account");
+            int userId = 1;
             // Validate recruiter
-            var recruiter = _recruiterService.GetByUserId(userId.Value);
+            var recruiter = _recruiterService.GetByUserId(userId);
             if (recruiter == null)
             {
                 TempData["ErrorMessage"] = "Tài khoản của bạn chưa đăng ký thông tin nhà tuyển dụng.";
@@ -160,30 +160,71 @@ namespace TopCVWeb.Controllers
         {
             var job = _jobsService.GetById(id);
             if (job == null)
-                return NotFound();
+            {
+                return NotFound("Không tìm thấy bài tuyển dụng.");
+            }
+
+            ViewBag.Categories = _categoryService.GetAll()
+                .Select(c => new SelectListItem
+                {
+                    Value = c.CategoryId.ToString(),
+                    Text = c.CategoryName
+                }).ToList();
 
             return View(job);
         }
 
-        // POST: Cập nhật job
         [HttpPost]
+        [ValidateAntiForgeryToken]
         public IActionResult Edit(Job job)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
-                // Lấy job cũ từ DB để giữ lại RecruiterId
-                var oldJob = _jobsService.GetById(job.JobId);
-                if (oldJob == null)
-                    return NotFound();
+                // Nếu dữ liệu không hợp lệ, trả lại view cùng danh sách Category
+                ViewBag.Categories = _categoryService.GetAll()
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CategoryId.ToString(),
+                        Text = c.CategoryName
+                    }).ToList();
 
-                job.RecruiterId = oldJob.RecruiterId; 
-                job.CreateDate = oldJob.CreateDate;   
+                return View(job);
+            }
 
+            // Lấy dữ liệu cũ để giữ lại các trường không cho phép chỉnh sửa
+            var existingJob = _jobsService.GetById(job.JobId);
+            if (existingJob == null)
+            {
+                return NotFound("Không tìm thấy bài tuyển dụng.");
+            }
+
+            try
+            {
+                // ✅ Giữ lại RecruiterId & CreateDate
+                job.RecruiterId = existingJob.RecruiterId;
+                job.CreateDate = existingJob.CreateDate;
+
+                // ✅ Cập nhật DB
                 _jobsService.Update(job);
+
+                TempData["SuccessMessage"] = "Cập nhật bài tuyển dụng thành công!";
                 return RedirectToAction("MyJobs");
             }
-            return View(job);
+            catch (Exception ex)
+            {
+                ModelState.AddModelError("", $"Có lỗi khi cập nhật: {ex.Message}");
+
+                ViewBag.Categories = _categoryService.GetAll()
+                    .Select(c => new SelectListItem
+                    {
+                        Value = c.CategoryId.ToString(),
+                        Text = c.CategoryName
+                    }).ToList();
+
+                return View(job);
+            }
         }
+
         // POST: Xác nhận xóa job
         [HttpPost, ActionName("Delete")]
         public IActionResult DeleteConfirmed(int id)
