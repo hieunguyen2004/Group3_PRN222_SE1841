@@ -66,5 +66,8 @@ namespace Service
             _repo.Save();
             return true;
         }
+        public User GetUserById(int userId) => _repo.GetById(userId);
+        public void Update(User user) => _repo.Update(user);
+
     }
 }

@@ -24,8 +24,17 @@ namespace Repository
             return _context.Users.FirstOrDefault(u => u.ResetToken == token);
         }
         public void Add(User user) => _context.Users.Add(user);
-        public void Update(User user) => _context.Users.Update(user);
+        public void Update(User user)
+        {
+            _context.Users.Update(user);
+            _context.SaveChanges(); 
+        }
         public void Save() => _context.SaveChanges();
+
+        public User GetById(int userId)
+        {
+            return _context.Users.FirstOrDefault(u => u.UserId == userId);
+        }
     }
 
 }

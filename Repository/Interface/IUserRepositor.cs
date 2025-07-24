@@ -15,5 +15,6 @@ namespace Repository.Interface
         void Add(User user);
         void Update(User user);
         void Save();
+        User GetById(int userId);
     }
 }

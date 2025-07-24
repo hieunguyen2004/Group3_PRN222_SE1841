@@ -13,5 +13,8 @@ namespace Service.Interface
         User? Login(string username, string password);
         string? GenerateResetToken(string email);
         bool ResetPassword(string token, string newPassword);
+        User GetUserById(int userId);
+        void Update(User user);
+
     }
 }
