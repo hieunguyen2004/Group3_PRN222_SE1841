@@ -27,7 +27,7 @@ namespace TopCVWeb.Controllers
                 return Unauthorized(); // or RedirectToAction("Login")
             }
 
-            var seeker = await _jobSeekerService.GetJobSeekerByUser(userId.Value);
+            var seeker = await _jobSeekerService.GetJobSeekerByUserAsync(userId.Value);
             if (seeker == null)
             {
                 return Unauthorized();
@@ -74,7 +74,7 @@ namespace TopCVWeb.Controllers
             //    return RedirectToAction("UploadForm");
             //}
 
-            var seeker = await _jobSeekerService.GetJobSeekerByUser(userId.Value);
+            var seeker = await _jobSeekerService.GetJobSeekerByUserAsync(userId.Value);
             var cv = new Cv
             {
                 SeekerId =  seeker.SeekerId,
