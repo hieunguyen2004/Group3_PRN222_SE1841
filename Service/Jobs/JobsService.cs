@@ -12,7 +12,7 @@ namespace Service.Jobs
             _jobsRepo = jobsRepo;
         }
 
-        public List<Job> GetJobsByUserId(int userId)
+        public List<Job> GetJobsByUserId(int? userId)
         {
             return _jobsRepo.GetJobsByUserId(userId);
         }

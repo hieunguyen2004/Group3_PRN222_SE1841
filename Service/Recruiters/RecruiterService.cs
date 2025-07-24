@@ -12,7 +12,7 @@ namespace Service.Recruiters
             _recruiterRepository = recruiterRepository;
         }
 
-        public Recruiter? GetByUserId(int userId) => _recruiterRepository.GetByUserId(userId);
+        public Recruiter? GetByUserId(int? userId) => _recruiterRepository.GetByUserId(userId);
 
     }
 }

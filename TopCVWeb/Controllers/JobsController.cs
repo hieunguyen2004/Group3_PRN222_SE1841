@@ -28,11 +28,11 @@ namespace TopCVWeb.Controllers
         // Hiển thị danh sách job theo recruiter hiện tại
         public IActionResult MyJobs()
         {
-           // int? userId = HttpContext.Session.GetInt32("UserId");
-           // if (userId == null)
-           //   return RedirectToAction("Login", "Account");
-            int userId = 1;
-            //  var jobs = _jobsService.GetJobsByUserId(userId.Value);
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
+                return RedirectToAction("Login", "Auth");
+           
+            
 
             var recruiter = _recruiterService.GetByUserId(userId);
             if (recruiter == null)
@@ -45,7 +45,9 @@ namespace TopCVWeb.Controllers
         // Trang thống kê ứng viên theo từng bài
         public IActionResult ManageApplicants()
         {
-            int userId = 1; // test cứng
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
+                return RedirectToAction("Login", "Auth");
             var recruiter = _recruiterService.GetByUserId(userId);
             if (recruiter == null)
                 return Content("Không tìm thấy recruiter");
@@ -99,11 +101,11 @@ namespace TopCVWeb.Controllers
         {
             if (ModelState.IsValid)
             {
-                int userId = 1; // test tạm
 
-               // int? userId = HttpContext.Session.GetInt32("UserId");
-               // if (userId == null)
-               //     return RedirectToAction("Login", "Account");
+
+                int? userId = HttpContext.Session.GetInt32("userId");
+                if (userId == null)
+                    return RedirectToAction("Login", "Auth");
 
 
                 // Lấy recruiter tương ứng với userId
