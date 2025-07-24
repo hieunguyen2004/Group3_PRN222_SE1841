@@ -1,0 +1,32 @@
+﻿@model List<TopCVWeb.Models.ApplicantViewModel>
+
+<h2>Danh sách ứng viên</h2>
+
+<table class="table table-bordered">
+    <thead>
+        <tr>
+            <th>Tên ứng viên</th>
+            <th>Ngày nộp</th>
+            <th>Trạng thái</th>
+            <th>CV</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var applicant in Model)
+        {
+            <tr>
+                <td>@applicant.FullName</td>
+                <td>@applicant.SubmitDate?.ToString("dd/MM/yyyy")</td>
+                <td>@applicant.Status</td>
+                <td>
+                    <a class="btn btn-sm btn-info"
+                       asp-action="ViewCv"
+                       asp-route-cvId="@applicant.CvId"
+                       target="_blank">Xem CV</a>
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
+
+<a asp-action="ManageApplicants" class="btn btn-secondary">Quay lại</a>

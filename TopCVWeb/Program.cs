@@ -1,9 +1,21 @@
+
 ﻿using DAO.Models;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using Repository.Interface;
 using Service;
 using Service.Interface;
+
+
+using Repository.Applications;
+using Repository.Cvs;
+using Repository.Jobs;
+using Repository.Recruiters;
+using Service.Applications;
+using Service.Cvs;
+using Service.Jobs;
+using Service.Recruiters;
+
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +26,7 @@ builder.Logging.ClearProviders();
 builder.Logging.AddLog4Net(log4NetConfigPath);
 
 builder.Services.AddControllersWithViews();
+
 builder.Services.AddSession();
 
 builder.Services.AddDbContext<MyDbContext>(options =>
@@ -25,6 +38,20 @@ builder.Services.AddScoped<IUserRepository, UserRepository>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 
+
+
+
+builder.Services.AddScoped<IJobsService, JobsService>();
+builder.Services.AddScoped<IJobsRepository, JobsRepository>();
+
+builder.Services.AddScoped<IRecruiterRepository, RecruiterRepository>();
+builder.Services.AddScoped<IRecruiterService, RecruiterService>();
+
+builder.Services.AddScoped<IApplicationsRepository, ApplicationsRepository>();
+builder.Services.AddScoped<IApplicationService, ApplicationService>();
+
+builder.Services.AddScoped<ICvRepository, CvRepository>();
+builder.Services.AddScoped<ICvService, CvService>();
 
 
 var app = builder.Build();
