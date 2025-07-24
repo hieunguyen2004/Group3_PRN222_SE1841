@@ -35,6 +35,12 @@ namespace Repository
         {
             return _context.Users.FirstOrDefault(u => u.UserId == userId);
         }
+
+        public List<User> GetAll()
+        {
+            return _context.Users.ToList();
+        }
+
     }
 
 }

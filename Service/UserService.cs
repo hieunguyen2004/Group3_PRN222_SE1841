@@ -14,11 +14,13 @@ namespace Service
         private readonly IUserRepository _repo;
         private readonly MyDbContext _context;
 
-        public UserService(IUserRepository repo, MyDbContext context)
-        {
-            _repo = repo;
-            _context = context;
-        }
+        
+
+        //public UserService(IUserRepository repo)
+        //{
+        //    _repo = repo;
+        //    _context = context;
+        //}
 
         public bool Register(User user, string rawPassword, string role, out string error)
         {
@@ -138,15 +140,25 @@ namespace Service
         }
 
         public User GetUserById(int userId) => _repo.GetById(userId);
-        public void Update(User user) => _repo.Update(user);
-
-
-
+        //public void Update(User user) => _repo.Update(user);
 
         public User? GetUserByEmail(string email)
         {
             return _repo.GetByEmail(email);
         }
+        public List<User> GetAll()
+        {
+            return _repo.GetAll();
+        }
 
+        public User? GetById(int id)
+        {
+            return _repo.GetById(id);
+        }
+        public void Update(User user)
+        {
+            _repo.Update(user);
+            _repo.Save();
+        }
     }
 }

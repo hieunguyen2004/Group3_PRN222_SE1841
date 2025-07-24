@@ -22,5 +22,8 @@ namespace Service.Interface
         User? GetUserByEmail(string email);
         void SendResetPasswordEmail(string email, string resetLink);
 
+        List<User> GetAll();
+        User? GetById(int id);
+
     }
 }

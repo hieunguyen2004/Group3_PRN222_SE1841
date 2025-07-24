@@ -1,0 +1,64 @@
+﻿@using DAO.Models
+@model List<User>
+
+<div class="container py-4">
+    <h2 class="mb-4 text-primary">📋 Danh sách người dùng</h2>
+
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+
+    <div class="table-responsive shadow rounded border">
+        <table class="table table-hover align-middle mb-0">
+            <thead class="table-primary text-center">
+                <tr>
+                    <th>#</th>
+                    <th>Tên đăng nhập</th>
+                    <th>Email</th>
+                    <th>Quyền</th>
+                    <th>Trạng thái</th>
+                    <th>Hành động</th>
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Any())
+                {
+                    foreach (var user in Model)
+                    {
+                        var status = user.Status?.ToLower() ?? "inactive";
+                        var badgeClass = status == "active" ? "bg-success" : "bg-danger";
+                        var nextStatus = status == "active" ? "Inactive" : "Active";
+                        var buttonLabel = status == "active" ? "Inactive" : "Active";
+                        var icon = status == "active" ? "bi-lock" : "bi-unlock";
+
+                        <tr class="text-center">
+                            <td>@user.UserId</td>
+                            <td>@user.Username</td>
+                            <td>@user.Email</td>
+                            <td><span class="badge bg-secondary">@user.RoleId</span></td>
+                            <td>
+                                <span class="badge @badgeClass px-3 py-2">@user.Status</span>
+                            </td>
+                            <td>
+                                <form asp-action="ChangeStatus" method="post" class="d-inline">
+                                    <input type="hidden" name="id" value="@user.UserId" />
+                                    <input type="hidden" name="newStatus" value="@nextStatus" />
+                                    <button type="submit" class="btn btn-sm btn-outline-primary rounded-pill">
+                                        <i class="bi @icon me-1"></i> @buttonLabel
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                    }
+                }
+                else
+                {
+                    <tr>
+                        <td colspan="6" class="text-center text-muted py-4">Không có người dùng nào.</td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+</div>
