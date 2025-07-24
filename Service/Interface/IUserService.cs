@@ -9,9 +9,12 @@ namespace Service.Interface
 {
     public interface IUserService
     {
-        bool Register(User user, string rawPassword);
+        bool Register(User user, string rawPassword, string role, out string error);
+
         User? Login(string username, string password);
         string? GenerateResetToken(string email);
         bool ResetPassword(string token, string newPassword);
+        User? GetUserByEmail(string email);
+        void SendResetPasswordEmail(string email, string resetLink);
     }
 }

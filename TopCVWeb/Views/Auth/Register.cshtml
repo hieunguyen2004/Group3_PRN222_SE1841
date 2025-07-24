@@ -1,25 +1,24 @@
 ﻿@model DAO.Models.User
 
-<form asp-action="Register" method="post">
-    <div>
-        <label>Username</label>
-        <input asp-for="Username" required />
-    </div>
-    <div>
-        <label>Password</label>
-        <input name="rawPassword" type="password" required />
-    </div>
-    <div>
-        <label>First Name</label>
-        <input asp-for="Firstname" />
-    </div>
-    <div>
-        <label>Last Name</label>
-        <input asp-for="Lastname" />
-    </div>
-    <div>
-        <label>Email</label>
-        <input asp-for="Email" type="email" />
-    </div>
-    <button type="submit">Register</button>
-</form>
+<div class="auth-page">
+    <h2>Register</h2>
+    @if (ViewBag.Error != null)
+    {
+        <div class="alert alert-danger">@ViewBag.Error</div>
+    }
+    <form asp-action="Register" method="post">
+        <input asp-for="Username" placeholder="Username" required />
+
+        <input name="rawPassword" type="password" placeholder="Password" required />
+
+        <input asp-for="Firstname" placeholder="First Name" />
+
+        <input asp-for="Lastname" placeholder="Last Name" />
+
+        <input asp-for="Email" type="email" placeholder="Email" />
+
+        <input type="hidden" name="role" value="jobseeker" />
+
+        <button type="submit">Register</button>
+    </form>
+</div>
