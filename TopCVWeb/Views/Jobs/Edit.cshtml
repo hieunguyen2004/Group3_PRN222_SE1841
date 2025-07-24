@@ -1,0 +1,32 @@
+﻿@model DAO.Models.Job
+
+@{
+    ViewData["Title"] = "Chỉnh sửa bài đăng";
+}
+
+<h2>@ViewData["Title"]</h2>
+
+<form asp-action="Edit" method="post">
+    <input type="hidden" asp-for="JobId" />
+
+    <div class="mb-3">
+        <label class="form-label">Tiêu đề</label>
+        <input asp-for="JobTitle" class="form-control" />
+        <span asp-validation-for="JobTitle" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Địa điểm</label>
+        <input asp-for="Location" class="form-control" />
+        <span asp-validation-for="Location" class="text-danger" />
+    </div>
+
+    <div class="mb-3">
+        <label class="form-label">Lương</label>
+        <input asp-for="Salary" class="form-control" />
+        <span asp-validation-for="Salary" class="text-danger" />
+    </div>
+
+    <button type="submit" class="btn btn-primary">Lưu thay đổi</button>
+    <a asp-action="MyJobs" class="btn btn-secondary">Hủy</a>
+</form>

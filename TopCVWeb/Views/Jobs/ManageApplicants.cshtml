@@ -1,0 +1,42 @@
+﻿@model List<JobWithApplicantsCountViewModel>
+
+@{
+    ViewData["Title"] = "Quản lý ứng viên";
+}
+
+<h2 class="mb-4">Quản lý ứng viên theo bài đăng</h2>
+
+<table class="table table-striped table-hover">
+    <thead class="table-dark">
+        <tr>
+            <th>Tên công việc</th>
+            <th class="text-center">Số lượng ứng viên</th>
+            <th class="text-center">Hành động</th>
+        </tr>
+    </thead>
+    <tbody>
+        @foreach (var job in Model)
+        {
+            <tr>
+                <td>@job.JobTitle</td>
+                <td class="text-center">
+                    <span class="badge bg-primary">@job.ApplicantCount</span>
+                </td>
+                <td class="text-center">
+                    @if (job.ApplicantCount > 0)
+                    {
+                        <a class="btn btn-sm btn-info"
+                           asp-action="Applicants"
+                           asp-route-jobId="@job.JobId">
+                            Xem ứng viên
+                        </a>
+                    }
+                    else
+                    {
+                        <span class="text-muted">Chưa có ứng viên</span>
+                    }
+                </td>
+            </tr>
+        }
+    </tbody>
+</table>
