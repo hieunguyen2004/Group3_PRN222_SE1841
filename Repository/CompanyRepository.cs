@@ -23,14 +23,9 @@ namespace Repository
             await _context.Companies.AddAsync(company);
         }
 
-        public void Delete(Company company)
-        {
-            _context.Companies.Remove(company);
-        }
-
         public async Task<List<Company>> GetAllAsync()
         {
-            return await _context.Companies.OrderBy(c => c.CompanyName).ToListAsync();
+            return await _context.Companies.OrderBy(c => c.CompanyId).ToListAsync();
         }
 
         public async Task<Company?> GetByIdAsync(int companyId)
@@ -38,9 +33,19 @@ namespace Repository
             return await _context.Companies.FindAsync(companyId);
         }
 
+        public void Save()
+        {
+            throw new NotImplementedException();
+        }
+
         public void Update(Company company)
         {
             _context.Companies.Update(company);
+        }
+
+        public async Task SaveAsync()
+        {
+            await _context.SaveChangesAsync();
         }
     }
 }

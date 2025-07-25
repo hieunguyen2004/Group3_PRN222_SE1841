@@ -1,0 +1,106 @@
+﻿@model DAO.Models.Company
+
+@{
+    var actionName = ViewContext.RouteData.Values["action"]?.ToString();
+    var isEdit = actionName == "Edit";
+    ViewData["Title"] = isEdit ? "Chỉnh sửa công ty" : "Thêm công ty";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4">@ViewData["Title"]</h2>
+
+    <form asp-action="@actionName" method="post" class="row g-3">
+        @if (isEdit)
+        {
+            <input type="hidden" asp-for="CompanyId" />
+        }
+
+        <div class="col-md-6">
+            <label asp-for="CompanyName" class="form-label">Tên công ty</label>
+            <input asp-for="CompanyName" class="form-control" />
+            <span asp-validation-for="CompanyName" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="City" class="form-label">Thành phố</label>
+            <input asp-for="City" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="District" class="form-label">Quận/Huyện</label>
+            <input asp-for="District" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Commune" class="form-label">Phường/Xã</label>
+            <input asp-for="Commune" class="form-control" />
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="Address" class="form-label">Địa chỉ cụ thể</label>
+            <input asp-for="Address" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Location" class="form-label">Vị trí (Google Map URL hoặc tọa độ)</label>
+            <input asp-for="Location" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Phone" class="form-label">Số điện thoại</label>
+            <input asp-for="Phone" class="form-control" />
+            <span asp-validation-for="Phone" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Email" class="form-label">Email</label>
+            <input asp-for="Email" class="form-control" />
+            <span asp-validation-for="Email" class="text-danger"></span>
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="Website" class="form-label">Website</label>
+            <input asp-for="Website" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="CompanyType" class="form-label">Loại công ty</label>
+            <input asp-for="CompanyType" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="ImageCompany" class="form-label">Link ảnh công ty</label>
+            <input asp-for="ImageCompany" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="LogoCompany" class="form-label">Link logo công ty</label>
+            <input asp-for="LogoCompany" class="form-control" />
+        </div>
+
+        <div class="col-md-6">
+            <label asp-for="StatusCompany" class="form-label">Trạng thái</label>
+            <select asp-for="StatusCompany" class="form-select">
+                <option value="">-- Chọn --</option>
+                <option>Active</option>
+                <option>Inactive</option>
+                <option>Pending</option>
+            </select>
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="Description" class="form-label">Mô tả ngắn</label>
+            <textarea asp-for="Description" class="form-control" rows="2"></textarea>
+        </div>
+
+        <div class="col-md-12">
+            <label asp-for="Detail" class="form-label">Chi tiết</label>
+            <textarea asp-for="Detail" class="form-control" rows="4"></textarea>
+        </div>
+
+        <div class="col-12">
+            <button type="submit" class="btn btn-primary">Lưu</button>
+            <a asp-action="Index" class="btn btn-secondary">Quay lại</a>
+        </div>
+    </form>
+</div>

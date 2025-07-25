@@ -13,6 +13,6 @@ namespace Repository.Interface
         Task<List<Company>> GetAllAsync();
         Task AddAsync(Company company);
         void Update(Company company);
-        void Delete(Company company);
+        Task SaveAsync();
     }
 }
