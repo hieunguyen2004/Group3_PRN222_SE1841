@@ -18,7 +18,7 @@ namespace TopCVWeb.Controllers
             _jobSekkerService = jobSekkerService;
         }
 
-        public async Task<IActionResult> Index(string? searchTitle, int? categoryId, int? companyId, int pageIndex = 1, int pageSize = 10)
+        public async Task<IActionResult> Index(string? searchTitle, int? categoryId, int? companyId, int pageIndex = 1, int pageSize = 6)
         {
             var seekerId = await GetCurrentSeekerIdAsync();
             var viewModel = await _jobService.GetHomeViewModelAsync(searchTitle, categoryId, companyId, pageIndex, pageSize, seekerId);

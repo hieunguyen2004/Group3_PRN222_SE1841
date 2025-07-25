@@ -27,3 +27,7 @@
         });
     });
 });
+
+$('#pageSize').on('change', function () {
+    $('#pageSizeForm').submit();
+});
