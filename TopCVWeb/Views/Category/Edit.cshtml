@@ -1,0 +1,48 @@
+﻿@model DAO.Models.Category
+
+@{
+    var isEdit = ViewContext.RouteData.Values["action"]?.ToString() == "Edit";
+    ViewData["Title"] = isEdit ? "Chỉnh sửa danh mục" : "Thêm danh mục";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4 text-primary">@ViewData["Title"]</h2>
+
+    <div class="card shadow border-0">
+        <div class="card-body">
+            <form asp-action="@ViewContext.RouteData.Values["action"]" method="post" class="row g-3">
+                @if (isEdit)
+                {
+                    <input type="hidden" asp-for="CategoryId" />
+                }
+
+                <div class="col-md-6">
+                    <label asp-for="CategoryName" class="form-label">📌 Tên danh mục</label>
+                    <input asp-for="CategoryName" class="form-control" placeholder="Nhập tên danh mục..." />
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                </div>
+
+                <div class="col-md-6">
+                    <label asp-for="CategoryImage" class="form-label">🖼 Ảnh (URL)</label>
+                    <input asp-for="CategoryImage" class="form-control" placeholder="Dán link ảnh vào đây..." />
+                    <span asp-validation-for="CategoryImage" class="text-danger"></span>
+                </div>
+
+                @if (!string.IsNullOrEmpty(Model?.CategoryImage))
+                {
+                    <div class="col-12">
+                        <label class="form-label">Xem trước ảnh:</label><br />
+                        <img src="@Model.CategoryImage" alt="Preview" style="max-height: 150px;" class="rounded shadow-sm" />
+                    </div>
+                }
+
+                <div class="col-12 mt-3">
+                    <button type="submit" class="btn btn-primary">
+                        💾 @((isEdit ? "Cập nhật" : "Thêm mới"))
+                    </button>
+                    <a asp-action="Index" class="btn btn-secondary">↩️ Quay lại</a>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>

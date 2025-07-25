@@ -14,5 +14,6 @@ namespace Repository.Interface
         Task AddAsync(Category category);
         void Update(Category category);
         void Delete(Category category);
+        Task SaveAsync();
     }
 }

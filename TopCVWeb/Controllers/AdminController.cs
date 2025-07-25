@@ -15,12 +15,35 @@ namespace TopCVWeb.Controllers
 
 
         // GET: /Admin/UserList
-        public IActionResult UserList()
+        public IActionResult UserList(string? searchTerm, int page = 1, int pageSize = 10)
         {
             try
             {
                 var users = _userService.GetAll();
-                return View(users);
+
+                // Tìm kiếm theo Username hoặc Email
+                if (!string.IsNullOrEmpty(searchTerm))
+                {
+                    users = users
+                        .Where(u =>
+                            (!string.IsNullOrEmpty(u.Username) && u.Username.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
+                            (!string.IsNullOrEmpty(u.Email) && u.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
+                        .ToList();
+                }
+
+                var totalUsers = users.Count;
+                var totalPages = (int)Math.Ceiling(totalUsers / (double)pageSize);
+
+                var pagedUsers = users
+                    .Skip((page - 1) * pageSize)
+                    .Take(pageSize)
+                    .ToList();
+
+                ViewBag.CurrentPage = page;
+                ViewBag.TotalPages = totalPages;
+                ViewBag.SearchTerm = searchTerm;
+
+                return View(pagedUsers);
             }
             catch (Exception ex)
             {
