@@ -1,86 +1,42 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Service.Interface;
 using DAO.Models;
-using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Mvc;
+using Service.CategoryServices;
 
-public class CategoryController : Controller
+namespace TopCVWeb.Controllers
 {
-    private readonly ICategoryService _service;
-    private const int PageSize = 10;
-
-    public CategoryController(ICategoryService service)
+    public class CategoryController : Controller
     {
-        _service = service;
-    }
+        private readonly ICategoryService _categoryService;
 
-    public async Task<IActionResult> Index(string? searchTerm, int page = 1)
-    {
-        var categories = await _service.GetAllAsync();
-
-        if (!string.IsNullOrEmpty(searchTerm))
+        public CategoryController(ICategoryService categoryService)
         {
-            categories = categories
-                .Where(c => c.CategoryName != null && c.CategoryName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                .ToList();
+            _categoryService = categoryService;
         }
 
-        int totalItems = categories.Count;
-        int totalPages = (int)Math.Ceiling((double)totalItems / PageSize);
-
-        var pagedCategories = categories
-            .Skip((page - 1) * PageSize)
-            .Take(PageSize)
-            .ToList();
-
-        ViewBag.CurrentPage = page;
-        ViewBag.TotalPages = totalPages;
-        ViewBag.SearchTerm = searchTerm;
-
-        return View(pagedCategories);
-    }
-
-    public async Task<IActionResult> Details(int id)
-    {
-        var category = await _service.GetByIdAsync(id);
-        return category == null ? NotFound() : View(category);
-    }
-
-    public IActionResult Create() => View();
-
-    [HttpPost]
-    public async Task<IActionResult> Create(Category category)
-    {
-        if (!ModelState.IsValid) return View(category);
-        await _service.AddAsync(category);
-        return RedirectToAction("Index");
-    }
-
-    public async Task<IActionResult> Edit(int id)
-    {
-        var category = await _service.GetByIdAsync(id);
-        return category == null ? NotFound() : View(category);
-    }
-
-    [HttpPost]
-    public async Task<IActionResult> Edit(Category category)
-    {
-        if (!ModelState.IsValid) return View(category);
-        await _service.UpdateAsync(category);
-        return RedirectToAction("Index");
-    }
-
-
-    [HttpPost]
-    public async Task<IActionResult> Delete(int id)
-    {
-        try
+        [HttpPost]
+        public IActionResult Add([FromBody] Category category)
         {
-            await _service.DeleteAsync(id);
+            if (string.IsNullOrWhiteSpace(category.CategoryName))
+            {
+                return Json(new { success = false, message = "Tên danh mục không được để trống." });
+            }
+
+            try
+            {
+                // Thêm mới category
+                _categoryService.Add(category);
+
+                return Json(new
+                {
+                    success = true,
+                    categoryId = category.CategoryId,   // EF sẽ tự cập nhật sau khi SaveChanges
+                    categoryName = category.CategoryName
+                });
+            }
+            catch (Exception ex)
+            {
+                return Json(new { success = false, message = ex.Message });
+            }
         }
-        catch (DbUpdateException)
-        {
-            TempData["ErrorMessage"] = "❌ Không thể xoá vì danh mục đang được sử dụng trong công việc.";
-        }
-        return RedirectToAction("Index");
     }
 }

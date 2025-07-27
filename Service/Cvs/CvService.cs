@@ -17,5 +17,9 @@ namespace Service.Cvs
         {
             return _cvRepository.GetById(cvId);
         }
+        public void Update(Cv cv) 
+        {
+            _cvRepository.Update(cv);
+        }
     }
 }
