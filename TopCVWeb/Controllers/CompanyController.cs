@@ -15,6 +15,12 @@ namespace WebApp.Controllers
 
         public async Task<IActionResult> Index(string? searchTerm, int page = 1, int pageSize = 10)
         {
+            var roleId = HttpContext.Session.GetInt32("RoleId");
+            if (roleId != 3)
+            {
+                return RedirectToAction("AccessDenied", "Auth");
+            }
+
             var allCompanies = await _companyService.GetAllAsync();
 
             if (!string.IsNullOrEmpty(searchTerm))

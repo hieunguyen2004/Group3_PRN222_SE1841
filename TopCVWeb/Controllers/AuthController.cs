@@ -1,4 +1,5 @@
 ﻿using DAO.Models;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
 using TopCVWeb.Models;
@@ -30,7 +31,12 @@ namespace TopCVWeb.Controllers
         }
 
         [HttpGet]
-        public IActionResult Login() => View();
+        public IActionResult Login(string? username = "")
+        {
+            ViewBag.Username = username ?? "";
+            return View();
+        }
+
 
         [HttpPost]
         public IActionResult Login(string username, string password)
@@ -44,6 +50,7 @@ namespace TopCVWeb.Controllers
 
             HttpContext.Session.SetString("username", user.Username);
             HttpContext.Session.SetInt32("userId", user.UserId);
+            HttpContext.Session.SetInt32("RoleId", user.RoleId ?? 0);
 
             return RedirectToAction("Index", "Home");
         }

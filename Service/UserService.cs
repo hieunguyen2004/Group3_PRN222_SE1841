@@ -160,5 +160,10 @@ namespace Service
             _repo.Update(user);
             _repo.Save();
         }
+        public void Add(User user)
+        {
+            _repo.Add(user);
+            _repo.Save();
+        }
     }
 }
