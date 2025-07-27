@@ -1,130 +1,184 @@
-﻿@using DAO.Models
-@model List<User>
+﻿@using Microsoft.AspNetCore.Mvc.Rendering
+@model List<DAO.Models.User>
 
 @{
+    var roleId = Context.Session.GetInt32("RoleId") ?? 0;
     ViewData["Title"] = "Danh sách người dùng";
     var searchTerm = ViewBag.SearchTerm as string ?? "";
+    var selectedRole = ViewBag.SelectedRole as int? ?? 0;
+    var roleOptions = new List<SelectListItem>
+    {
+        new SelectListItem { Text = "User", Value = "1" },
+        new SelectListItem { Text = "Recruiter", Value = "2" }
+    };
 }
 
-<div class="container py-4">
-    <h2 class="mb-4 text-primary">📋 Danh sách người dùng</h2>
+@if (roleId == 3)
+{
+    <div class="container py-4">
+        <h2 class="mb-4 text-primary">📋 Danh sách người dùng</h2>
 
-    @if (ViewBag.Error != null)
-    {
-        <div class="alert alert-danger">@ViewBag.Error</div>
-    }
-
-    <div class="row mb-3 align-items-center">
-        <div class="col-md-8">
-            <form asp-action="UserList" method="get" class="d-flex gap-2">
-                <input type="text" name="searchTerm" value="@searchTerm" class="form-control" placeholder="🔍 Tìm theo tên đăng nhập hoặc email..." />
-                <button type="submit" class="btn btn-outline-primary">
-                    <i class="bi bi-search"></i> Tìm
-                </button>
-            </form>
+        <!-- Lọc và nút tạo recruiter -->
+        <div class="row mb-4 align-items-end">
+            <div class="col-md-9">
+                <form asp-action="UserList" method="get" class="row g-2">
+                    <div class="col-md-5">
+                        <input type="text" name="searchTerm" value="@searchTerm"
+                               class="form-control shadow-sm" placeholder="🔍 Tìm theo tên đăng nhập hoặc email..." />
+                    </div>
+                    <div class="col-md-4">
+                        <select name="role" class="form-select shadow-sm"
+                                asp-items="@(new SelectList(roleOptions, "Value", "Text", selectedRole))">
+                            <option value="">-- Chọn vai trò --</option>
+                        </select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-outline-primary w-100 shadow-sm">
+                            <i class="bi bi-search"></i> Lọc
+                        </button>
+                    </div>
+                </form>
+            </div>
+            <div class="col-md-3 text-end">
+                <form asp-action="CreateRandomRecruiter" method="post">
+                    <button type="submit" class="btn btn-success shadow-sm w-100">
+                        🎲 Tạo Recruiter ngẫu nhiên
+                    </button>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <div class="table-responsive shadow rounded border">
-        <table class="table table-hover align-middle mb-0">
-            <thead class="table-primary text-center">
-                <tr>
-                    <th>#</th>
-                    <th>Tên đăng nhập</th>
-                    <th>Email</th>
-                    <th>Quyền</th>
-                    <th>Trạng thái</th>
-                    <th>Hành động</th>
-                </tr>
-            </thead>
-            <tbody>
-                @if (Model.Any())
-                {
-                    @foreach (var user in Model)
+        <!-- Thông báo -->
+        @if (TempData["Message"] != null)
+        {
+            <div class="alert alert-success">
+                @Html.Raw(TempData["Message"])
+            </div>
+
+            @if (TempData["RecruiterLoginLink"] != null)
+            {
+                <div class="alert alert-light border d-flex justify-content-between align-items-center shadow-sm">
+                    <span class="text-break" id="loginLinkText">@TempData["RecruiterLoginLink"]</span>
+                    <button class="btn btn-outline-secondary btn-sm ms-3" onclick="copyLoginLink()">📋 Sao chép</button>
+                </div>
+            }
+        }
+
+        @if (TempData["Error"] != null)
+        {
+            <div class="alert alert-danger">@TempData["Error"]</div>
+        }
+
+        @if (ViewBag.Error != null)
+        {
+            <div class="alert alert-danger">@ViewBag.Error</div>
+        }
+
+        <!-- Bảng người dùng -->
+        <div class="table-responsive shadow rounded border bg-white">
+            <table class="table table-hover align-middle mb-0">
+                <thead class="table-primary text-center">
+                    <tr>
+                        <th>#</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Email</th>
+                        <th>Trạng thái</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @if (Model.Any())
                     {
-                        var rawStatus = user.Status?.ToLower();
-                        var status = rawStatus ?? "pending";
-
-                        var badgeClass = status switch
+                        @foreach (var user in Model)
                         {
-                            "active" => "bg-success",
-                            "inactive" => "bg-danger",
-                            _ => "bg-warning text-dark"
-                        };
+                            var status = user.Status?.ToLower() ?? "pending";
+                            var badgeClass = status switch
+                            {
+                                "active" => "bg-success",
+                                "inactive" => "bg-danger",
+                                _ => "bg-warning text-dark"
+                            };
 
-                        <tr class="text-center">
-                            <td>@user.UserId</td>
-                            <td>@user.Username</td>
-                            <td>@user.Email</td>
-                            <td><span class="badge bg-secondary">@user.RoleId</span></td>
-                            <td>
-                                <span class="badge @badgeClass px-3 py-2 text-uppercase">@status</span>
-                            </td>
-                            <td>
-                                @if (status == "pending")
-                                {
-                                    <form asp-action="ChangeStatus" method="post" class="d-inline me-2">
-                                        <input type="hidden" name="id" value="@user.UserId" />
-                                        <input type="hidden" name="newStatus" value="Active" />
-                                        <button type="submit" class="btn btn-sm btn-outline-success rounded-pill">
-                                            <i class="bi bi-unlock me-1"></i> Active
-                                        </button>
-                                    </form>
+                            var roleLabel = user.RoleId == 1 ? "User" :
+                            user.RoleId == 2 ? "Recruiter" : "Unknown";
+
+                            var roleClass = user.RoleId == 1 ? "bg-info text-dark" :
+                            user.RoleId == 2 ? "bg-purple text-white" : "bg-secondary";
+
+                            <tr class="text-center">
+                                <td>@user.UserId</td>
+                                <td>@user.Username</td>
+                                <td>@user.Email</td>
+                                <td><span class="badge @badgeClass px-3 py-2 text-uppercase">@status</span></td>
+                                <td>
                                     <form asp-action="ChangeStatus" method="post" class="d-inline">
                                         <input type="hidden" name="id" value="@user.UserId" />
-                                        <input type="hidden" name="newStatus" value="Inactive" />
-                                        <button type="submit" class="btn btn-sm btn-outline-danger rounded-pill">
-                                            <i class="bi bi-lock me-1"></i> Inactive
+                                        <input type="hidden" name="newStatus" value="@(status == "active" ? "Inactive" : "Active")" />
+                                        <button type="submit"
+                                                class="btn btn-sm @(status == "active" ? "btn-outline-danger" : "btn-outline-success") rounded-pill">
+                                            <i class="bi @(status == "active" ? "bi-lock" : "bi-unlock") me-1"></i>
+                                            @(status == "active" ? "Inactive" : "Active")
                                         </button>
                                     </form>
-                                }
-                                else
-                                {
-                                    var nextStatus = status == "active" ? "Inactive" : "Active";
-                                    var icon = status == "active" ? "bi-lock" : "bi-unlock";
-                                    var btnClass = status == "active" ? "btn-outline-danger" : "btn-outline-success";
-
-                                    <form asp-action="ChangeStatus" method="post" class="d-inline">
-                                        <input type="hidden" name="id" value="@user.UserId" />
-                                        <input type="hidden" name="newStatus" value="@nextStatus" />
-                                        <button type="submit" class="btn btn-sm @btnClass rounded-pill">
-                                            <i class="bi @icon me-1"></i> @nextStatus
-                                        </button>
-                                    </form>
-                                }
-                            </td>
+                                </td>
+                            </tr>
+                        }
+                    }
+                    else
+                    {
+                        <tr>
+                            <td colspan="6" class="text-center text-muted py-4">Không có người dùng nào.</td>
                         </tr>
                     }
-                }
-                else
-                {
-                    <tr>
-                        <td colspan="6" class="text-center text-muted py-4">Không có người dùng nào.</td>
-                    </tr>
-                }
-            </tbody>
-        </table>
+                </tbody>
+            </table>
 
-        @if ((int)ViewBag.TotalPages > 1)
-        {
-            <div class="d-flex justify-content-between align-items-center mt-4 px-2">
-                <div>
-                    Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+            
+        </div>
+        <div>
+            @if ((int)ViewBag.TotalPages > 1)
+            {
+                <div class="d-flex justify-content-between align-items-center mt-4 px-2">
+                    <div>Trang @ViewBag.CurrentPage / @ViewBag.TotalPages</div>
+                    <nav>
+                        <ul class="pagination mb-0">
+                            @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                            {
+                                <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                    <a class="page-link" asp-action="UserList"
+                                       asp-route-page="@i"
+                                       asp-route-searchTerm="@searchTerm"
+                                       asp-route-role="@selectedRole">@i</a>
+                                </li>
+                            }
+                        </ul>
+                    </nav>
                 </div>
-                <nav>
-                    <ul class="pagination mb-0">
-                        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
-                        {
-                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                                <a class="page-link"
-                                   asp-action="UserList"
-                                   asp-route-page="@i"
-                                   asp-route-searchTerm="@searchTerm">@i</a>
-                            </li>
-                        }
-                    </ul>
-                </nav>
-            </div>
-        }
+            }
+        </div>
     </div>
-</div>
+}
+else
+{
+    <div class="container py-5 text-center">
+        <h2 class="text-danger">🚫 Bạn không có quyền truy cập trang này.</h2>
+        <a href="/" class="btn btn-outline-primary mt-3">Về trang chủ</a>
+    </div>
+}
+
+@section Scripts {
+    <script>
+        function copyLoginLink() {
+            const linkText = document.getElementById("loginLinkText").innerText;
+            navigator.clipboard.writeText(linkText)
+                .then(() => alert("✅ Đã sao chép link!"))
+                .catch(() => alert("❌ Sao chép thất bại!"));
+        }
+    </script>
+}
+
+<style>
+    .bg-purple {
+        background-color: #6f42c1 !important;
+    }
+</style>

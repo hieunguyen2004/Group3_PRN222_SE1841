@@ -1,17 +1,35 @@
-﻿@* Login.cshtml *@
-@model DAO.Models.User
+﻿@{
+    ViewData["Title"] = "Đăng nhập";
+
+    var username = Context.Request.Query["username"].ToString();
+    var password = Context.Request.Query["password"].ToString(); 
+}
 
 <div class="auth-page">
     <h2>Login</h2>
 
-    <form asp-action="Login" method="post">
-        <input type="text" name="username" placeholder="Username" required />
-        <input type="password" name="password" placeholder="Password" required />
+    <form asp-action="Login" method="post" id="loginForm">
+        <input type="text" name="username" id="username" placeholder="Username" value="@username" required />
+
+        <input type="password" name="password" id="password" placeholder="Password" required />
+
         <div class="text-danger">
             @Html.ValidationSummary(false, "", new { @class = "text-danger" })
         </div>
+
         <button type="submit">Login</button>
     </form>
 
     <a class="forgot-link" href="/Auth/ForgotPassword">Forgot Password?</a>
 </div>
+
+@section Scripts {
+    <script>
+        window.addEventListener("DOMContentLoaded", function () {
+            const passwordFromUrl = new URLSearchParams(window.location.search).get("password");
+            if (passwordFromUrl) {
+                document.getElementById("password").value = passwordFromUrl;
+            }
+        });
+    </script>
+}

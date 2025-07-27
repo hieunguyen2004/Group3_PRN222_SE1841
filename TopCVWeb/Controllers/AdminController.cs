@@ -1,6 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using DAO.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.IdentityModel.Tokens;
 using Service.Interface;
-using DAO.Models;
 
 namespace TopCVWeb.Controllers
 {
@@ -13,15 +14,19 @@ namespace TopCVWeb.Controllers
             _userService = userService;
         }
 
-
         // GET: /Admin/UserList
-        public IActionResult UserList(string? searchTerm, int page = 1, int pageSize = 10)
+        public IActionResult UserList(string? searchTerm, int? role, int page = 1, int pageSize = 10)
         {
             try
             {
                 var users = _userService.GetAll();
 
-                // Tìm kiếm theo Username hoặc Email
+                // Chỉ lấy user có RoleId là 1 hoặc 2
+                users = users
+                    .Where(u => u.RoleId == 1 || u.RoleId == 2)
+                    .ToList();
+
+                // Tìm kiếm
                 if (!string.IsNullOrEmpty(searchTerm))
                 {
                     users = users
@@ -29,6 +34,12 @@ namespace TopCVWeb.Controllers
                             (!string.IsNullOrEmpty(u.Username) && u.Username.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)) ||
                             (!string.IsNullOrEmpty(u.Email) && u.Email.Contains(searchTerm, StringComparison.OrdinalIgnoreCase)))
                         .ToList();
+                }
+
+                // Lọc theo RoleId
+                if (role != null && (role == 1 || role == 2))
+                {
+                    users = users.Where(u => u.RoleId == role).ToList();
                 }
 
                 var totalUsers = users.Count;
@@ -42,6 +53,7 @@ namespace TopCVWeb.Controllers
                 ViewBag.CurrentPage = page;
                 ViewBag.TotalPages = totalPages;
                 ViewBag.SearchTerm = searchTerm;
+                ViewBag.SelectedRole = role;
 
                 return View(pagedUsers);
             }
@@ -93,5 +105,54 @@ namespace TopCVWeb.Controllers
                 return RedirectToAction("UserList");
             }
         }
+
+        [HttpPost]
+        [HttpPost]
+        public IActionResult CreateRandomRecruiter()
+        {
+            var rand = new Random();
+            string username;
+            string email;
+            string rawPassword = "123456";
+            string hashedPassword = "jZae727K08KaOmKSgOaGzww/XVqGr/PKEgIMkjrcbJI=";
+            User user;
+
+            while (true)
+            {
+                var randomNumber = rand.Next(1000, 9999);
+                username = $"recruiter{randomNumber}";
+                email = $"recruiter{randomNumber}@example.com";
+
+                var existed = _userService.GetAll().Any(u =>
+                    u.Username == username || u.Email == email);
+
+                if (!existed)
+                {
+                    user = new User
+                    {
+                        Username = username,
+                        Email = email,
+                        Password = hashedPassword,
+                        RoleId = 2,
+                        Status = "Pending"
+                    };
+
+                    _userService.Add(user);
+                    break;
+                }
+            }
+
+            var loginUrl = Url.Action("Login", "Auth", new
+            {
+                username = user.Username,
+                password = rawPassword
+            }, Request.Scheme);
+
+            TempData["Message"] = $"✅ Đã tạo Recruiter: <b>{username}</b> / <b>{rawPassword}</b>";
+            TempData["RecruiterLoginLink"] = loginUrl;
+
+            return RedirectToAction("UserList");
+        }
+
     }
 }

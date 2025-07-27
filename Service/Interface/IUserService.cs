@@ -25,5 +25,7 @@ namespace Service.Interface
         List<User> GetAll();
         User? GetById(int id);
 
+        void Add(User user);
+
     }
 }
