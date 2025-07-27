@@ -71,25 +71,6 @@
             }
         </tbody>
     </table>
-    <div class="d-flex justify-content-between align-items-center mt-4">
-        <div>
-            Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
-        </div>
-        <nav>
-            <ul class="pagination mb-0">
-                @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
-                {
-                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
-                        <a class="page-link"
-                           asp-action="Index"
-                           asp-route-page="@i"
-                           asp-route-searchTerm="@ViewBag.SearchTerm">@i</a>
-                    </li>
-                }
-            </ul>
-        </nav>
-    </div>
-
 </div>
 
 @functions {

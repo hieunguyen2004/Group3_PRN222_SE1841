@@ -12,7 +12,7 @@ namespace TopCVWeb.Controllers
         private readonly IJobSeekerService _jobSeekerService;
         private readonly IWebHostEnvironment _env;
 
-        public CVController(ICVService cvService, IWebHostEnvironment env,IApplicationService applicationService, IJobSeekerService jobSeekerService)
+        public CVController(ICVService cvService, IWebHostEnvironment env, IApplicationService applicationService, IJobSeekerService jobSeekerService)
         {
             _cvService = cvService;
             _env = env;
@@ -27,13 +27,13 @@ namespace TopCVWeb.Controllers
                 return RedirectToAction("Login", "Auth");
             }
 
-            var seeker =   _jobSeekerService.GetJobSeekerByUser(userId.Value);
+            var seeker = _jobSeekerService.GetJobSeekerByUser(userId.Value);
             if (seeker == null)
             {
                 return RedirectToAction("Login", "Auth");
             }
 
-            var cvs =   _cvService.GetCVsBySeekerId(seeker.SeekerId);
+            var cvs = _cvService.GetCVsBySeekerId(seeker.SeekerId);
 
             return View(cvs);
         }
@@ -63,24 +63,24 @@ namespace TopCVWeb.Controllers
             byte[] fileBytes;
             using (var memoryStream = new MemoryStream())
             {
-                 cvFile.CopyTo(memoryStream);
+                cvFile.CopyTo(memoryStream);
                 fileBytes = memoryStream.ToArray();
             }
 
-            
 
-            var seeker =   _jobSeekerService.GetJobSeekerByUser(userId.Value);
+
+            var seeker = _jobSeekerService.GetJobSeekerByUser(userId.Value);
             var cv = new Cv
             {
-                SeekerId =  seeker.SeekerId,
+                SeekerId = seeker.SeekerId,
                 CvStatus = "Pending",
                 CvLink = fileBytes,
                 FileName = Path.GetFileName(cvFile.FileName)
             };
 
-              _cvService.AddCV(cv);
-              _applicationService.AddApplication(jobId, cv.CvId);
-            
+            _cvService.AddCV(cv);
+            _applicationService.AddApplication(jobId, cv.CvId);
+
 
             TempData["Success"] = "CV uploaded and application submitted!";
             return RedirectToAction("List");
@@ -90,7 +90,7 @@ namespace TopCVWeb.Controllers
 
         public IActionResult ViewCV(int cvId)
         {
-            var cv =   _cvService.GetCVById(cvId);
+            var cv = _cvService.GetCVById(cvId);
             if (cv == null || cv.CvLink == null)
             {
                 return NotFound();

@@ -38,13 +38,37 @@ namespace Repository
             return await _context.Categories.FindAsync(categoryId);
         }
 
+       
+        public IEnumerable<Category> GetAll()
+        {
+            return _context.Categories.ToList();
+        }
+
+        public Category GetById(int id)
+        {
+            return _context.Categories.FirstOrDefault(c => c.CategoryId == id);
+        }
+
+        public void Add(Category category)
+        {
+            _context.Categories.Add(category);
+            _context.SaveChanges();
+        }
+
         public void Update(Category category)
         {
             _context.Categories.Update(category);
+            _context.SaveChanges();
         }
-        public async Task SaveAsync()
+
+        public void Delete(int id)
         {
-            await _context.SaveChangesAsync();
+            var category = GetById(id);
+            if (category != null)
+            {
+                _context.Categories.Remove(category);
+                _context.SaveChanges();
+            }
         }
     }
 }
