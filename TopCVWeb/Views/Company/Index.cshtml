@@ -1,0 +1,102 @@
+﻿@model List<DAO.Models.Company>
+@{
+    ViewData["Title"] = "Danh sách công ty";
+    var searchTerm = Context.Request.Query["searchTerm"].ToString();
+}
+
+<div class="container py-4">
+    <h2 class="text-primary mb-4">📋 Danh sách công ty</h2>
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-8">
+            <form asp-action="Index" method="get" class="d-flex gap-2">
+                <input type="text" name="searchTerm" value="@searchTerm" class="form-control" placeholder="🔍 Tìm theo tên công ty..." />
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-search"></i> Tìm
+                </button>
+            </form>
+        </div>
+        <div class="col-md-4 text-end">
+            <a class="btn btn-success" asp-action="Create">
+                ➕ Thêm công ty
+            </a>
+        </div>
+    </div>
+
+    <table class="table table-hover table-bordered rounded shadow-sm">
+        <thead class="table-primary text-center">
+            <tr>
+                <th>ID</th>
+                <th>Tên công ty</th>
+                <th>Thành phố</th>
+                <th>Email</th>
+                <th>SĐT</th>
+                <th>Trạng thái</th>
+                <th>Hành động</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.Count == 0)
+            {
+                <tr class="text-center">
+                    <td colspan="7" class="text-muted">Không tìm thấy công ty nào phù hợp.</td>
+                </tr>
+            }
+            else
+            {
+                foreach (var item in Model)
+                {
+                    <tr class="text-center align-middle">
+                        <td>@item.CompanyId</td>
+                        <td>@item.CompanyName</td>
+                        <td>@item.City</td>
+                        <td>@item.Email</td>
+                        <td>@item.Phone</td>
+                        <td>
+                            <span class="badge @GetStatusClass(item.StatusCompany)">
+                                @item.StatusCompany
+                            </span>
+                        </td>
+                        <td>
+                            <a class="btn btn-sm btn-outline-info me-1" asp-action="Details" asp-route-id="@item.CompanyId">
+                                👁 Xem
+                            </a>
+                            <a class="btn btn-sm btn-outline-warning me-1" asp-action="Edit" asp-route-id="@item.CompanyId">
+                                ✏️ Sửa
+                            </a>
+                        
+                        </td>
+                    </tr>
+                }
+            }
+        </tbody>
+    </table>
+    <div class="d-flex justify-content-between align-items-center mt-4">
+        <div>
+            Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+        </div>
+        <nav>
+            <ul class="pagination mb-0">
+                @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                {
+                    <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                        <a class="page-link"
+                           asp-action="Index"
+                           asp-route-page="@i"
+                           asp-route-searchTerm="@ViewBag.SearchTerm">@i</a>
+                    </li>
+                }
+            </ul>
+        </nav>
+    </div>
+
+</div>
+
+@functions {
+    string GetStatusClass(string? status) => status?.ToLower() switch
+    {
+        "active" => "bg-success text-white px-2 py-1",
+        "inactive" => "bg-danger text-white px-2 py-1",
+        _ => "bg-warning text-dark px-2 py-1"
+    };
+}

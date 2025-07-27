@@ -1,0 +1,80 @@
+﻿@using DAO.Models
+@model List<Cv>
+
+<h2>CV của tôi</h2>
+
+<table class="table">
+    <thead>
+        <tr>
+            <th>#</th>
+            <th>Tên File</th>
+            <th>Công việc</th>
+            <th>Ngày nộp</th>
+            <th>Trạng thái</th>
+            <th>Xem CV</th>
+        </tr>
+    </thead>
+    <tbody>
+        @if (Model.Any())
+        {
+           
+            foreach (var cv in Model)
+            {
+                <tr>
+                    <td>@cv.CvId</td>
+                    <td>@cv.FileName</td>
+
+                    <td>
+                        @if (cv.Applications != null && cv.Applications.Any())
+                        {
+                          
+                                @foreach (var app in cv.Applications)
+                                {
+                                    @app.Job.JobTitle
+                                }
+                           
+                        }
+                        else
+                        {
+                            <span>No Applications</span>
+                        }
+                    </td>
+
+                    <td>
+                        @if (cv.Applications != null && cv.Applications.Any())
+                        {
+                          
+                                @foreach (var app in cv.Applications)
+                                {
+                                    @app.SubmitDate
+                                }
+                           
+                        }
+                        else
+                        {
+                            <span>-</span>
+                        }
+                    </td>
+
+                    <td>@cv.CvStatus</td>
+                    <td>
+                        <a asp-controller="CV" asp-action="ViewCV" asp-route-cvId="@cv.CvId" target="_blank" class="btn btn-sm btn-primary">
+                            Xem
+                        </a>
+                    </td>
+                </tr>
+                
+            }
+        }
+        else
+        {
+            <tr><td colspan="5">No CVs uploaded yet.</td></tr>
+        }
+    
+
+    </tbody>
+</table>
+
+
+<hr />
+

@@ -16,7 +16,7 @@ public class JobsRepository : IJobsRepository
         return _context.Jobs.FirstOrDefault(j => j.RecruiterId == recruiterId);
     }
 
-    public List<Job> GetJobsByUserId(int userId)
+    public List<Job> GetJobsByUserId(int? userId)
     {
         return _context.Jobs
             .Include(j => j.Recruiter)

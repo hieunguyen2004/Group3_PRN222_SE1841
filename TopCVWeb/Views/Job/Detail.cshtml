@@ -1,0 +1,158 @@
+﻿@model TopCVWeb.ViewModels.JobDetailViewModel
+@{
+    ViewData["Title"] = Model.JobTitle;
+}
+
+<div class="container mt-4">
+    <div class="row">
+        <div class="col-md-8">
+            <div class="d-flex align-items-center mb-3">
+                <img src="@(Model.Company.LogoCompany ?? "/images/default-logo.png")" style="width: 80px; height: 80px;" class="me-3" />
+                <div>
+                    <h1>@Model.JobTitle</h1>
+                    <h4 class="text-muted">@Model.Company.CompanyName</h4>
+                </div>
+            </div>
+
+            <button id="toggleSaveBtn" class="btn @(Model.IsSaved ? "btn-success" : "btn-outline-success")" data-jobid="@Model.JobId">
+                <i class="fa-@(Model.IsSaved ? "solid" : "regular") fa-bookmark"></i>
+                @(Model.IsSaved ? "Đã theo dõi" : "Theo dõi công việc")
+            </button>
+            <button style="margin-bottom : 15px;" id="openUploadForm" class="btn btn-primary mt-3">Ứng tuyển công việc</button>
+
+            <hr />
+
+            <h4>Mô tả công việc</h4>
+            <p>@Html.Raw(Model.JobDescription)</p>
+
+            <h4>Yêu cầu ứng viên</h4>
+            <ul>
+                <li><strong>Kinh nghiệm:</strong> @Model.Experience</li>
+                <li><strong>Kỹ năng:</strong> @Model.Skills</li>
+                <li><strong>Giới tính:</strong> @Model.Gender</li>
+                <li><strong>Chuyên ngành:</strong> @Model.Profession</li>
+            </ul>
+            <p>@Html.Raw(Model.Requirements)</p>
+
+            <h4>Thông tin chi tiết</h4>
+            <ul>
+                <li><strong>Hình thức làm việc:</strong> @Model.JobType</li>
+                <li><strong>Thời gian làm việc:</strong> @Model.WorkingTime</li>
+                <li><strong>Vị trí:</strong> @Model.Position</li>
+                <li><strong>Địa điểm:</strong> @Model.Location</li>
+                <li><strong>Mức lương:</strong> @Model.Salary</li>
+                <li><strong>Số lượng tuyển:</strong> @Model.NumberOfSeeker</li>
+                <li><strong>Ngày đăng:</strong> @Model.CreateDate.ToString("dd/MM/yyyy")</li>
+                <li><strong>Hạn nộp hồ sơ:</strong> @Model.EndDate.ToString("dd/MM/yyyy")</li>
+                <li><strong>Trạng thái:</strong> @(Model.EndDate < DateOnly.FromDateTime(DateTime.Now) ? "Hết hạn" : "Đang tuyển")</li>
+            </ul>
+        </div>
+
+        <div class="col-md-4">
+            <div class="card mb-3">
+                <div class="card-header">Việc làm cùng ngành nghề</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var job in Model.SameCategoryJobs)
+                    {
+                        <a asp-action="Detail" asp-route-id="@job.JobId" class="list-group-item list-group-item-action">@job.JobTitle</a>
+                    }
+                </ul>
+            </div>
+
+            <div class="card mb-3">
+                <div class="card-header">Việc làm khác tại @Model.Company.CompanyName</div>
+                <ul class="list-group list-group-flush">
+                    @foreach (var job in Model.SameCompanyJobs)
+                    {
+                        <a asp-action="Detail" asp-route-id="@job.JobId" class="list-group-item list-group-item-action">@job.JobTitle</a>
+                    }
+                </ul>
+            </div>
+
+            <!-- ✅ Bổ sung logo công ty nếu cần -->
+            <div class="card mb-3">
+                <div class="card-header">Thông tin công ty</div>
+                <div class="card-body text-center">
+                    <img src="@(Model.Company.LogoCompany ?? "/images/default-logo.png")" alt="Logo" class="mb-2" style="max-width: 100px;" />
+                    <h5>@Model.Company.CompanyName</h5>
+                    <p>@Model.Company.Address</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="uploadFormOverlay" class="overlay">
+    <div class="popup-form">
+        <h4>Tải CV để ứng tuyển</h4>
+        <form asp-action="Upload" asp-controller="CV" method="post" enctype="multipart/form-data">
+            <input type="hidden" name="jobId" value="@Model.JobId" />
+            <input type="file" name="cvFile" accept=".pdf" required />
+            <div class="mt-3">
+                <button type="submit" class="btn btn-success">Gửi CV</button>
+                <button type="button" class="btn btn-secondary" id="closeUploadForm">Hủy</button>
+            </div>
+        </form>
+    </div>
+</div>
+<style>
+    .overlay {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.6);
+        z-index: 1050;
+    }
+
+    .popup-form {
+        background: white;
+        padding: 20px;
+        border-radius: 10px;
+        max-width: 400px;
+        margin: 100px auto;
+        box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+        position: relative;
+    }
+</style>
+
+@section Scripts {
+    <script>
+        $(document).ready(function () {
+            $('#toggleSaveBtn').click(function () {
+                var button = $(this);
+                var jobId = button.data('jobid');
+
+                $.post('@Url.Action("ToggleSave", "Job")', { jobId: jobId }, function (response) {
+                    if (response.success) {
+                        if (response.saved) {
+                            button.removeClass('btn-outline-success').addClass('btn-success');
+                            button.html('<i class="fa-solid fa-bookmark"></i> Đã theo dõi');
+                        } else {
+                            button.removeClass('btn-success').addClass('btn-outline-success');
+                            button.html('<i class="fa-regular fa-bookmark"></i> Theo dõi công việc');
+                        }
+                    } else {
+                        if (response.redirectUrl) {
+                            window.location.href = response.redirectUrl;
+                        } else {
+                            alert(response.message || 'Có lỗi xảy ra.');
+                        }
+                    }
+                });
+            });
+        });
+    </script>
+
+    <script>
+        document.getElementById("openUploadForm").onclick = () => {
+            document.getElementById("uploadFormOverlay").style.display = "block";
+        };
+        document.getElementById("closeUploadForm").onclick = () => {
+            document.getElementById("uploadFormOverlay").style.display = "none";
+        };
+    </script>
+
+}

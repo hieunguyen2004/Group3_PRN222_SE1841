@@ -1,11 +1,9 @@
-﻿
 using DAO.Models;
 
-namespace Service.Recruiters
+namespace Repository.Recruiters
 {
-    public interface IRecruiterService
+    public interface IRecruiterRepository
     {
         Recruiter? GetByUserId(int userId);
     }
-
 }

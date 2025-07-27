@@ -7,5 +7,7 @@
         public string? FullName { get; set; }
         public DateOnly? SubmitDate { get; set; }
         public string? Status { get; set; }
+
+        public string? Email { get; set; }
     }
 }

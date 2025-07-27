@@ -13,7 +13,7 @@ namespace Repository.Recruiters
             _context = context;
         }
 
-        public Recruiter? GetByUserId(int userId)
+        public Recruiter? GetByUserId(int? userId)
         {
             return _context.Recruiters
                            .Include(r => r.User)

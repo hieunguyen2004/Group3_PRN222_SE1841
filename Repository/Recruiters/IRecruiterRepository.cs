@@ -4,6 +4,6 @@ namespace Repository.Recruiters
 {
     public interface IRecruiterRepository
     {
-        Recruiter? GetByUserId(int userId);
+        Recruiter? GetByUserId(int? userId);
     }
 }

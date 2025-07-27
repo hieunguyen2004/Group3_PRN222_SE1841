@@ -1,0 +1,99 @@
+﻿@model DAO.Models.Company
+
+@{
+    ViewData["Title"] = "Chi tiết công ty";
+}
+
+<div class="container py-4">
+    <h2 class="mb-4 text-primary">📄 Chi tiết công ty</h2>
+
+    <div class="card shadow-sm">
+        <div class="card-body">
+            <dl class="row">
+                <dt class="col-sm-4">ID công ty</dt>
+                <dd class="col-sm-8">@Model.CompanyId</dd>
+
+                <dt class="col-sm-4">Tên công ty</dt>
+                <dd class="col-sm-8">@Model.CompanyName</dd>
+
+                <dt class="col-sm-4">Thành phố</dt>
+                <dd class="col-sm-8">@Model.City</dd>
+
+                <dt class="col-sm-4">Quận / Huyện</dt>
+                <dd class="col-sm-8">@Model.District</dd>
+
+                <dt class="col-sm-4">Phường / Xã</dt>
+                <dd class="col-sm-8">@Model.Commune</dd>
+
+                <dt class="col-sm-4">Địa chỉ</dt>
+                <dd class="col-sm-8">@Model.Address</dd>
+
+                <dt class="col-sm-4">Vị trí bản đồ</dt>
+                <dd class="col-sm-8">@Model.Location</dd>
+
+                <dt class="col-sm-4">Số điện thoại</dt>
+                <dd class="col-sm-8">@Model.Phone</dd>
+
+                <dt class="col-sm-4">Email</dt>
+                <dd class="col-sm-8">@Model.Email</dd>
+
+                <dt class="col-sm-4">Website</dt>
+                <dd class="col-sm-8">@Model.Website</dd>
+
+                <dt class="col-sm-4">Mô tả ngắn</dt>
+                <dd class="col-sm-8">@Model.Description</dd>
+
+                <dt class="col-sm-4">Chi tiết</dt>
+                <dd class="col-sm-8">@Model.Detail</dd>
+
+                <dt class="col-sm-4">Loại công ty</dt>
+                <dd class="col-sm-8">@Model.CompanyType</dd>
+
+                <dt class="col-sm-4">Ảnh đại diện</dt>
+                <dd class="col-sm-8">
+                    @if (!string.IsNullOrEmpty(Model.ImageCompany))
+                    {
+                        <img src="@Model.ImageCompany" alt="Ảnh công ty" class="img-thumbnail" style="max-height:200px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Logo</dt>
+                <dd class="col-sm-8">
+                    @if (!string.IsNullOrEmpty(Model.LogoCompany))
+                    {
+                        <img src="@Model.LogoCompany" alt="Logo công ty" class="img-thumbnail" style="max-height:100px;" />
+                    }
+                    else
+                    {
+                        <span class="text-muted">Không có</span>
+                    }
+                </dd>
+
+                <dt class="col-sm-4">Trạng thái</dt>
+                <dd class="col-sm-8">
+                    <span class="badge @GetStatusClass(Model.StatusCompany)">
+                        @Model.StatusCompany
+                    </span>
+                </dd>
+            </dl>
+        </div>
+
+        <div class="card-footer text-end">
+            <a asp-action="Edit" asp-route-id="@Model.CompanyId" class="btn btn-warning me-2">✏️ Sửa</a>
+            <a asp-action="Index" class="btn btn-secondary">← Quay lại danh sách</a>
+        </div>
+    </div>
+</div>
+
+@functions {
+    string GetStatusClass(string? status) => status?.ToLower() switch
+    {
+        "active" => "bg-success text-white px-2 py-1",
+        "inactive" => "bg-danger text-white px-2 py-1",
+        _ => "bg-warning text-dark px-2 py-1"
+    };
+}
