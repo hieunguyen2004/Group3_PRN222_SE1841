@@ -3,22 +3,63 @@
     ViewData["Title"] = "Việc làm đã theo dõi";
 }
 
-<h1>@ViewData["Title"]</h1>
+<div class="container">
+    <h1 class="mb-4">@ViewData["Title"]</h1>
 
-@if (Model.Any())
-{
-    @foreach (var job in Model)
+    @if (Model.Any())
     {
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title">@job.JobTitle</h5>
-                <h6 class="card-subtitle mb-2 text-muted">@job.CompanyName</h6>
-                <a asp-controller="Job" asp-action="Detail" asp-route-id="@job.JobId" class="btn btn-primary">Xem chi tiết</a>
-            </div>
+        <div class="row">
+            @foreach (var job in Model)
+            {
+                <div class="col-md-6 col-lg-4 mb-4">
+                    <div class="card h-100 shadow-sm">
+                        <div class="card-body d-flex flex-column">
+                            <div class="d-flex align-items-center mb-3">
+                                @if (!string.IsNullOrEmpty(job.LogoCompany))
+                                {
+                                    <img src="@job.LogoCompany" alt="Logo @job.CompanyName" class="company-logo me-3" style="width: 60px; height: 60px; object-fit: contain; border-radius: 8px;">
+                                }
+                                <div>
+                                    <h5 class="card-title mb-1">@job.JobTitle</h5>
+                                    <h6 class="card-subtitle text-muted">@job.CompanyName</h6>
+                                </div>
+                            </div>
+                            <ul class="list-unstyled mb-3">
+                                <li><strong>Mức lương:</strong> @job.Salary</li>
+                                <li><strong>Địa điểm:</strong> @job.Location</li>
+                            </ul>
+                            <div class="mt-auto">
+                                <a asp-controller="Job" asp-action="Detail" asp-route-id="@job.JobId" class="btn btn-primary w-100">Xem chi tiết</a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            }
         </div>
     }
-}
-else
-{
-    <p>Bạn chưa theo dõi việc làm nào. Hãy bắt đầu <a asp-controller="Home" asp-action="Index">tìm kiếm</a> ngay!</p>
-}
+    else
+    {
+        <div class="alert alert-info" role="alert">
+            Bạn chưa theo dõi việc làm nào. Hãy bắt đầu <a asp-controller="Home" asp-action="Index" class="alert-link">tìm kiếm</a> ngay!
+        </div>
+    }
+</div>
+<style>
+    /* Optional: Thêm CSS tùy chỉnh nếu cần */
+    .company-logo {
+        box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+    }
+
+    .card-title {
+        font-size: 1.25rem; /* Tăng kích thước tiêu đề công việc */
+        font-weight: 600;
+    }
+
+    .card-subtitle {
+        font-size: 0.95rem; /* Kích thước tên công ty */
+    }
+
+    .list-unstyled li {
+        margin-bottom: 0.3rem;
+    }
+</style>

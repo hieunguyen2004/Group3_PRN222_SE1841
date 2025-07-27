@@ -18,11 +18,12 @@ namespace TopCVWeb.ViewModels
         public int NumberOfSeeker { get; set; }
         public string Salary { get; set; }
         public string WorkingTime { get; set; }
-        public DateOnly CreateDate { get; set; }
-        public DateOnly EndDate { get; set; }
+        public DateOnly? CreateDate { get; set; }
+        public DateOnly? EndDate { get; set; }
         public Company Company { get; set; }
         public Category Category { get; set; }
         public bool IsSaved { get; set; }
+        public string JobStatus { get; set; }
 
         public List<JobViewModel> SameCategoryJobs { get; set; }
         public List<JobViewModel> SameCompanyJobs { get; set; }
