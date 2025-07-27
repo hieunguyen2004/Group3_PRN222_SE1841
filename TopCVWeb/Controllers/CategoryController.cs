@@ -1,6 +1,6 @@
 using DAO.Models;
 using Microsoft.AspNetCore.Mvc;
-using Service.CategoryServices;
+using Service.Interface;
 
 namespace TopCVWeb.Controllers
 {

@@ -1,43 +1,35 @@
-﻿using DAO.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DAO.Models;
 using Repository.Interface;
+using Service.Interface;
 
-public class CategoryService : ICategoryService
+namespace Service
 {
-    private readonly ICategoryRepository _repo;
-
-    public CategoryService(ICategoryRepository repo)
+    public class CategoryService : ICategoryService
     {
-        _repo = repo;
-    }
+        private readonly ICategoryRepository _categoryRepository;
 
-    public Task<List<Category>> GetAllAsync() => _repo.GetAllAsync();
-
-    public Task<Category?> GetByIdAsync(int id) => _repo.GetByIdAsync(id);
-
-    public async Task AddAsync(Category category)
-    {
-        await _repo.AddAsync(category);
-        await _repo.SaveAsync();
-    }
-
-    public async Task UpdateAsync(Category category)
-    {
-        _repo.Update(category);
-        await _repo.SaveAsync();
-    }
-
-    public async Task DeleteAsync(int id)
-    {
-        var category = await _repo.GetByIdAsync(id);
-        if (category != null)
+        public CategoryService(ICategoryRepository categoryRepository)
         {
-            _repo.Delete(category);
-            await _repo.SaveAsync();
+            _categoryRepository = categoryRepository;
+        }
+
+        public IEnumerable<Category> GetAll()
+        {
+            return _categoryRepository.GetAll();
+        }
+
+        public Category GetById(int id)
+        {
+            return _categoryRepository.GetById(id);
+        }
+        public void Add(Category category)
+        {
+            _categoryRepository.Add(category);
         }
     }
-    public async Task SaveAsync()
-    {
-        await _repo.SaveAsync();
-    }
-
 }

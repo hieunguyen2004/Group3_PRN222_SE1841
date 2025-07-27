@@ -1,24 +1,25 @@
-
 using DAO.Models;
-using Microsoft.EntityFrameworkCore;
+using Repository.Recruiters;
 
-namespace Repository.Recruiters
+namespace Service.Recruiters
+
+
+
 {
-    public class RecruiterRepository : IRecruiterRepository
+    public class RecruiterService : IRecruiterService
     {
-        private readonly MyDbContext _context;
+        private readonly IRecruiterRepository _recruiterRepository;
 
-        public RecruiterRepository(MyDbContext context)
+        public RecruiterService(IRecruiterRepository recruiterRepository)
         {
-            _context = context;
+            _recruiterRepository = recruiterRepository;
         }
 
-        public Recruiter? GetByUserId(int userId)
-        {
-            return _context.Recruiters
-                           .Include(r => r.User)
-                           .FirstOrDefault(r => r.UserId == userId);
-        }
+        public Recruiter? GetByUserId(int? userId) => _recruiterRepository.GetByUserId(userId);
+
+
+
+
+
     }
-
 }

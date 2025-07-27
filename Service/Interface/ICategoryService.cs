@@ -1,11 +1,16 @@
-﻿using DAO.Models;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using DAO.Models;
 
-public interface ICategoryService
+namespace Service.Interface
 {
-    Task<List<Category>> GetAllAsync();
-    Task<Category?> GetByIdAsync(int id);
-    Task AddAsync(Category category);
-    Task UpdateAsync(Category category);
-    Task DeleteAsync(int id);
-    Task SaveAsync();
+    public interface ICategoryService
+    {
+        IEnumerable<Category> GetAll();
+        Category GetById(int id);
+        void Add(Category category);
+    }
 }

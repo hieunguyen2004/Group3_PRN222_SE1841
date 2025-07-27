@@ -1,54 +1,106 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Service.Cvs;
+﻿using DAO.Models;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
+using Service.Interface;
 
 namespace TopCVWeb.Controllers
 {
-    public class CvController : Controller
+    public class CVController : Controller
     {
-        private readonly ICvService _cvService;
+        private readonly ICVService _cvService;
+        private readonly IApplicationService _applicationService;
+        private readonly IJobSeekerService _jobSeekerService;
+        private readonly IWebHostEnvironment _env;
 
-        public CvController(ICvService cvService)
+        public CVController(ICVService cvService, IWebHostEnvironment env, IApplicationService applicationService, IJobSeekerService jobSeekerService)
         {
             _cvService = cvService;
+            _env = env;
+            _applicationService = applicationService;
+            _jobSeekerService = jobSeekerService;
         }
-
-        /// <summary>
-        /// API cập nhật trạng thái CV (Nộp đơn / Chấp nhận / Từ chối)
-        /// </summary>
-        [HttpPost]
-        public IActionResult UpdateStatus([FromBody] UpdateStatusRequest req)
+        public IActionResult List()
         {
-            try
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
             {
-                if (req == null || req.Id <= 0)
-                {
-                    return Json(new { success = false, message = "Dữ liệu không hợp lệ." });
-                }
-
-                var cv = _cvService.GetById(req.Id);
-                if (cv == null)
-                {
-                    return Json(new { success = false, message = "Không tìm thấy CV." });
-                }
-
-                cv.CvStatus = req.Status;
-                _cvService.Update(cv);
-
-                return Json(new { success = true });
+                return RedirectToAction("Login", "Auth");
             }
-            catch (Exception ex)
+
+            var seeker = _jobSeekerService.GetJobSeekerByUser(userId.Value);
+            if (seeker == null)
             {
-                return Json(new { success = false, message = ex.Message });
+                return RedirectToAction("Login", "Auth");
             }
+
+            var cvs = _cvService.GetCVsBySeekerId(seeker.SeekerId);
+
+            return View(cvs);
         }
+
+
+        [HttpPost]
+        public IActionResult Upload(int seekerId, IFormFile cvFile, int jobId)
+        {
+            int? userId = HttpContext.Session.GetInt32("userId");
+            if (userId == null)
+            {
+                return RedirectToAction("Login", "Auth");
+            }
+            if (cvFile == null || cvFile.Length == 0)
+            {
+                TempData["Error"] = "Please upload a valid PDF file.";
+                return RedirectToAction("UploadForm");
+            }
+
+            var ext = Path.GetExtension(cvFile.FileName).ToLower();
+            if (ext != ".pdf")
+            {
+                TempData["Error"] = "Only PDF files are allowed.";
+                return RedirectToAction("UploadForm");
+            }
+
+            byte[] fileBytes;
+            using (var memoryStream = new MemoryStream())
+            {
+                cvFile.CopyTo(memoryStream);
+                fileBytes = memoryStream.ToArray();
+            }
+
+
+
+            var seeker = _jobSeekerService.GetJobSeekerByUser(userId.Value);
+            var cv = new Cv
+            {
+                SeekerId = seeker.SeekerId,
+                CvStatus = "Pending",
+                CvLink = fileBytes,
+                FileName = Path.GetFileName(cvFile.FileName)
+            };
+
+            _cvService.AddCV(cv);
+            _applicationService.AddApplication(jobId, cv.CvId);
+
+
+            TempData["Success"] = "CV uploaded and application submitted!";
+            return RedirectToAction("List");
+        }
+
+
+
+        public IActionResult ViewCV(int cvId)
+        {
+            var cv = _cvService.GetCVById(cvId);
+            if (cv == null || cv.CvLink == null)
+            {
+                return NotFound();
+            }
+
+            return File(cv.CvLink, "application/pdf");
+
+        }
+
+
     }
 
-    /// <summary>
-    /// Request model nhận từ Fetch (JS)
-    /// </summary>
-    public class UpdateStatusRequest
-    {
-        public int Id { get; set; }
-        public string Status { get; set; } = string.Empty;
-    }
 }
