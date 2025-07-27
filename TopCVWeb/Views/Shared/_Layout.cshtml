@@ -40,11 +40,14 @@
                         @if (isRecruiter)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Category" asp-action="Index">Category Management</a>
+                                <a class="nav-link text-dark" asp-controller="Jobs" asp-action="MyJobs">My Jobs</a>
                             </li>
                         }
                         @if (roleId == 3)
                         {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Category" asp-action="Index">Category Management</a>
+                            </li>
                             <li class="nav-item">
                                 <a class="nav-link text-dark" asp-controller="Admin" asp-action="UserList">List User</a>
                             </li>
