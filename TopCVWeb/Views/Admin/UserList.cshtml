@@ -1,6 +1,11 @@
 ﻿@using DAO.Models
 @model List<User>
 
+@{
+    ViewData["Title"] = "Danh sách người dùng";
+    var searchTerm = ViewBag.SearchTerm as string ?? "";
+}
+
 <div class="container py-4">
     <h2 class="mb-4 text-primary">📋 Danh sách người dùng</h2>
 
@@ -8,6 +13,17 @@
     {
         <div class="alert alert-danger">@ViewBag.Error</div>
     }
+
+    <div class="row mb-3 align-items-center">
+        <div class="col-md-8">
+            <form asp-action="UserList" method="get" class="d-flex gap-2">
+                <input type="text" name="searchTerm" value="@searchTerm" class="form-control" placeholder="🔍 Tìm theo tên đăng nhập hoặc email..." />
+                <button type="submit" class="btn btn-outline-primary">
+                    <i class="bi bi-search"></i> Tìm
+                </button>
+            </form>
+        </div>
+    </div>
 
     <div class="table-responsive shadow rounded border">
         <table class="table table-hover align-middle mb-0">
@@ -33,7 +49,7 @@
                         {
                             "active" => "bg-success",
                             "inactive" => "bg-danger",
-                            _ => "bg-warning text-dark" // cho "pending"
+                            _ => "bg-warning text-dark"
                         };
 
                         <tr class="text-center">
@@ -79,7 +95,6 @@
                             </td>
                         </tr>
                     }
-
                 }
                 else
                 {
@@ -89,5 +104,27 @@
                 }
             </tbody>
         </table>
+
+        @if ((int)ViewBag.TotalPages > 1)
+        {
+            <div class="d-flex justify-content-between align-items-center mt-4 px-2">
+                <div>
+                    Trang @ViewBag.CurrentPage / @ViewBag.TotalPages
+                </div>
+                <nav>
+                    <ul class="pagination mb-0">
+                        @for (int i = 1; i <= (int)ViewBag.TotalPages; i++)
+                        {
+                            <li class="page-item @(i == ViewBag.CurrentPage ? "active" : "")">
+                                <a class="page-link"
+                                   asp-action="UserList"
+                                   asp-route-page="@i"
+                                   asp-route-searchTerm="@searchTerm">@i</a>
+                            </li>
+                        }
+                    </ul>
+                </nav>
+            </div>
+        }
     </div>
 </div>

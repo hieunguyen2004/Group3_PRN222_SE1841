@@ -13,12 +13,31 @@ namespace WebApp.Controllers
             _companyService = companyService;
         }
 
-        // GET: /Company
-        public async Task<IActionResult> Index()
+        public async Task<IActionResult> Index(string? searchTerm, int page = 1, int pageSize = 10)
         {
-            var companies = await _companyService.GetAllAsync();
-            return View(companies);
+            var allCompanies = await _companyService.GetAllAsync();
+
+            if (!string.IsNullOrEmpty(searchTerm))
+            {
+                allCompanies = allCompanies
+                    .Where(c => c.CompanyName != null && c.CompanyName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+                    .ToList();
+            }
+
+            var totalItems = allCompanies.Count;
+            var totalPages = (int)Math.Ceiling(totalItems / (double)pageSize);
+            var pagedCompanies = allCompanies
+                .Skip((page - 1) * pageSize)
+                .Take(pageSize)
+                .ToList();
+
+            ViewBag.CurrentPage = page;
+            ViewBag.TotalPages = totalPages;
+            ViewBag.SearchTerm = searchTerm;
+
+            return View(pagedCompanies);
         }
+
 
         // GET: /Company/Create
         public IActionResult Create()
@@ -68,20 +87,20 @@ namespace WebApp.Controllers
             return View(company);
         }
 
-        [HttpGet("Company/Search")]
-        public async Task<IActionResult> Index(string? searchTerm)
-        {
-            var companies = await _companyService.GetAllAsync();
+        //[HttpGet("Company/Search")]
+        //public async Task<IActionResult> Index(string? searchTerm)
+        //{
+        //    var companies = await _companyService.GetAllAsync();
 
-            if (!string.IsNullOrWhiteSpace(searchTerm))
-            {
-                companies = companies
-                    .Where(c => c.CompanyName != null && c.CompanyName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
-                    .ToList();
-            }
+        //    if (!string.IsNullOrWhiteSpace(searchTerm))
+        //    {
+        //        companies = companies
+        //            .Where(c => c.CompanyName != null && c.CompanyName.Contains(searchTerm, StringComparison.OrdinalIgnoreCase))
+        //            .ToList();
+        //    }
 
-            return View(companies);
-        }
+        //    return View(companies);
+        //}
 
     }
 }
