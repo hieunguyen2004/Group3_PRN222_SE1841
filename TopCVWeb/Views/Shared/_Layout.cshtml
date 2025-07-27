@@ -33,14 +33,14 @@
                             var username = HttpContextAccessor.HttpContext.Session.GetString("username");
                             var roleId = HttpContextAccessor.HttpContext.Session.GetInt32("RoleId");
                             var userId = HttpContextAccessor.HttpContext.Session.GetInt32("userId") ?? 0;
-                            var isRecruiter = _userService.IsRecruiter(userId);
+                            // var isRecruiter = _userService.IsRecruiter(userId);
                         }
-                        @if (isRecruiter)
-                        {
-                            <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Jobs" asp-action="MyJobs">My Jobs</a>
-                            </li>
-                        }
+                         @if (roleId == 2)
+                         {
+                             <li class="nav-item">
+                                 <a class="nav-link text-dark" asp-controller="Jobs" asp-action="MyJobs">My Jobs</a>
+                             </li>
+                         }
                         @if (roleId == 3)
                         {
                             <li class="nav-item">
