@@ -41,7 +41,7 @@ namespace Service
 
             var homeViewModel = new HomeViewModel
             {
-                Jobs = new PaginatedList<JobViewModel>(jobViewModels, paginatedJobs.Count, pageIndex, pageSize),
+                Jobs = new PaginatedList<JobViewModel>(jobViewModels, paginatedJobs.TotalPages, pageIndex, pageSize),
                 Categories = await _unitOfWork.Categories.GetAllAsync(),
                 Companies = await _unitOfWork.Companies.GetAllAsync(),
                 SearchTitle = searchTitle,
@@ -81,11 +81,12 @@ namespace Service
                 NumberOfSeeker = job.NumberOfSeeker ?? 0,
                 Salary = job.Salary,
                 WorkingTime = job.WorkingTime,
-                CreateDate = job.CreateDate ?? DateOnly.MinValue,
-                EndDate = job.EndDate ?? DateOnly.MinValue,
+                CreateDate = job.CreateDate ?? null,
+                EndDate = job.EndDate ?? null,
                 Company = job.Recruiter.Company,
                 Category = job.Category,
                 IsSaved = isSavedTask,
+                JobStatus = job.Status,
                 SameCategoryJobs = sameCategoryJobVms,
                 SameCompanyJobs = sameCompanyJobVms
             };

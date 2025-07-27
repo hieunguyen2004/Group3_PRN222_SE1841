@@ -72,6 +72,8 @@ namespace Repository
             var query = _context.Jobs
                 .Include(j => j.Recruiter)
                     .ThenInclude(r => r.Company)
+                .Where(j => (j.EndDate == null || j.EndDate > DateOnly.FromDateTime(DateTime.Now)))
+                .Where(j => (j.Status == null || j.Status.ToLower() == "active"))
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchTitle))

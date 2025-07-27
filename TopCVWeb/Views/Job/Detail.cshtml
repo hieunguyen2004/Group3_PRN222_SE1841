@@ -1,6 +1,17 @@
 ﻿@model TopCVWeb.ViewModels.JobDetailViewModel
 @{
     ViewData["Title"] = Model.JobTitle;
+    bool status = Model.EndDate >= DateOnly.FromDateTime(DateTime.Now) && Model.JobStatus?.ToLower() == "active";
+    var statusMessage = status ? "Đang tuyển" : "Hết hạn";
+    string createDate = "N/A", endDate = "N/A";
+    if (Model.CreateDate != null)
+    {
+        createDate = Model.CreateDate?.ToString("dd/MM/yyyy");
+    }
+    if (Model.EndDate != null)
+    {
+        endDate = Model.EndDate?.ToString("dd/MM/yyyy");
+    }
 }
 
 <div class="container mt-4">
@@ -13,12 +24,14 @@
                     <h4 class="text-muted">@Model.Company.CompanyName</h4>
                 </div>
             </div>
-
-            <button id="toggleSaveBtn" class="btn @(Model.IsSaved ? "btn-success" : "btn-outline-success")" data-jobid="@Model.JobId">
-                <i class="fa-@(Model.IsSaved ? "solid" : "regular") fa-bookmark"></i>
-                @(Model.IsSaved ? "Đã theo dõi" : "Theo dõi công việc")
-            </button>
-            <button style="margin-bottom : 15px;" id="openUploadForm" class="btn btn-primary mt-3">Ứng tuyển công việc</button>
+            @if (status)
+            {
+                <button id="toggleSaveBtn" class="btn @(Model.IsSaved ? "btn-success" : "btn-outline-success")" data-jobid="@Model.JobId">
+                    <i class="fa-@(Model.IsSaved ? "solid" : "regular") fa-bookmark"></i>
+                    @(Model.IsSaved ? "Đã theo dõi" : "Theo dõi công việc")
+                </button>
+                <button style="margin-bottom : 15px;" id="openUploadForm" class="btn btn-primary mt-3">Ứng tuyển công việc</button>
+            }
 
             <hr />
 
@@ -42,9 +55,9 @@
                 <li><strong>Địa điểm:</strong> @Model.Location</li>
                 <li><strong>Mức lương:</strong> @Model.Salary</li>
                 <li><strong>Số lượng tuyển:</strong> @Model.NumberOfSeeker</li>
-                <li><strong>Ngày đăng:</strong> @Model.CreateDate.ToString("dd/MM/yyyy")</li>
-                <li><strong>Hạn nộp hồ sơ:</strong> @Model.EndDate.ToString("dd/MM/yyyy")</li>
-                <li><strong>Trạng thái:</strong> @(Model.EndDate < DateOnly.FromDateTime(DateTime.Now) ? "Hết hạn" : "Đang tuyển")</li>
+                <li><strong>Ngày đăng:</strong> @createDate</li>
+                <li><strong>Hạn nộp hồ sơ:</strong> @endDate</li>
+                <li><strong>Trạng thái:</strong> @statusMessage</li>
             </ul>
         </div>
 
@@ -69,7 +82,6 @@
                 </ul>
             </div>
 
-            <!-- ✅ Bổ sung logo công ty nếu cần -->
             <div class="card mb-3">
                 <div class="card-header">Thông tin công ty</div>
                 <div class="card-body text-center">
