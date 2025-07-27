@@ -35,6 +35,7 @@ namespace Service
                     LogoCompany = job.Recruiter?.Company?.LogoCompany,
                     Salary = job.Salary,
                     Location = job.Location,
+                    NumberOfSeeker = job.NumberOfSeeker ?? 0,
                     IsSaved = seekerId.HasValue && await _unitOfWork.SaveJobs.IsJobSavedAsync(seekerId.Value, job.JobId)
                 });
             }
@@ -131,6 +132,17 @@ namespace Service
                 await _unitOfWork.SaveJobs.AddAsync(newSave);
                 await _unitOfWork.SaveChangesAsync();
                 return true;
+            }
+        }
+
+        public async void UpdateJobNumberOfSeeker(int jobId)
+        {
+            var job = await _unitOfWork.Jobs.GetByIdAsync(jobId);
+            if (job != null)
+            {
+                job.NumberOfSeeker = (job.NumberOfSeeker ?? 0) + 1;
+                _unitOfWork.Jobs.Update(job);
+                await _unitOfWork.SaveChangesAsync();
             }
         }
     }

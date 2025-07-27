@@ -8,6 +8,7 @@
         public string LogoCompany { get; set; }
         public string Salary { get; set; }
         public string Location { get; set; }
-        public bool IsSaved { get; set; } // Thêm thuộc tính này để biết job đã được lưu chưa
+        public int NumberOfSeeker { get; set; }
+        public bool IsSaved { get; set; }
     }
 }

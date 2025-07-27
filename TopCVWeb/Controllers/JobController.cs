@@ -18,9 +18,7 @@ namespace TopCVWeb.Controllers
         }
         public async Task<IActionResult> Detail(int id)
         {
-            _logger.LogInformation("ok1");
             var seekerId = await GetCurrentSeekerIdAsync();
-            _logger.LogInformation("ok2");
             var viewModel = await _jobService.GetJobDetailViewModelAsync(id, seekerId);
 
             if (viewModel == null)
@@ -28,6 +26,8 @@ namespace TopCVWeb.Controllers
                 return NotFound();
             }
 
+            _jobService.UpdateJobNumberOfSeeker(id);
+            _logger.LogInformation($"Job detail viewed: {id} by Seeker: {seekerId}");
             return View(viewModel);
         }
         public async Task<IActionResult> SavedJobs()
