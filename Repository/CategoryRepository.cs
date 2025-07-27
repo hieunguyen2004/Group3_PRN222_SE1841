@@ -46,5 +46,10 @@ namespace Repository
         {
             await _context.SaveChangesAsync();
         }
+
+        public IEnumerable<Category> GetAll()
+        {
+            return _context.Categories.ToList();
+        }
     }
 }

@@ -8,4 +8,6 @@ public interface ICategoryService
     Task UpdateAsync(Category category);
     Task DeleteAsync(int id);
     Task SaveAsync();
+    IEnumerable<Category> GetAll();
+
 }

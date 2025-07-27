@@ -46,8 +46,19 @@ public class JobsRepository : IJobsRepository
         // Cập nhật từng thuộc tính cụ thể
         existingJob.JobTitle = job.JobTitle;
         existingJob.JobDescription = job.JobDescription;
+        existingJob.Requirements = job.Requirements;
+        existingJob.Position = job.Position;
+        existingJob.Experience = job.Experience;
+        existingJob.Skills = job.Skills;
+        existingJob.Gender = job.Gender;
+        existingJob.Profession = job.Profession;
+        existingJob.NumberOfSeeker = job.NumberOfSeeker;
+        existingJob.JobType = job.JobType;
+        existingJob.Location = job.Location;
+        existingJob.WorkingTime = job.WorkingTime;
         existingJob.Salary = job.Salary;
-        // ... các field cần sửa
+        existingJob.EndDate = job.EndDate;
+        existingJob.CategoryId = job.CategoryId;
         _context.SaveChanges();
     }
 
