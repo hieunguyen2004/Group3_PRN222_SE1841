@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using Service.Interface;
 using DAO.Models;
+using Microsoft.EntityFrameworkCore;
 
 public class CategoryController : Controller
 {
@@ -68,16 +69,18 @@ public class CategoryController : Controller
         return RedirectToAction("Index");
     }
 
+
+    [HttpPost]
     public async Task<IActionResult> Delete(int id)
     {
-        var category = await _service.GetByIdAsync(id);
-        return category == null ? NotFound() : View(category);
-    }
-
-    [HttpPost, ActionName("Delete")]
-    public async Task<IActionResult> DeleteConfirmed(int id)
-    {
-        await _service.DeleteAsync(id);
+        try
+        {
+            await _service.DeleteAsync(id);
+        }
+        catch (DbUpdateException)
+        {
+            TempData["ErrorMessage"] = "❌ Không thể xoá vì danh mục đang được sử dụng trong công việc.";
+        }
         return RedirectToAction("Index");
     }
 }

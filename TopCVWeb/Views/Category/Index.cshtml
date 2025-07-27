@@ -3,6 +3,14 @@
     ViewData["Title"] = "Danh sách danh mục";
     var searchTerm = ViewBag.SearchTerm as string ?? "";
 }
+@if (TempData["ErrorMessage"] != null)
+{
+    <div class="alert alert-danger alert-dismissible fade show" role="alert">
+        @TempData["ErrorMessage"]
+        <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+    </div>
+}
+
 
 <div class="container py-4">
     <h2 class="text-primary mb-4">📂 Danh sách danh mục</h2>
@@ -55,8 +63,16 @@
                                 }
                             </td>
                             <td>
-                                <a class="btn btn-sm btn-outline-warning me-1" asp-action="Edit" asp-route-id="@item.CategoryId">✏️ Sửa</a>
+                                <a class="btn btn-sm btn-outline-warning me-1"
+                                   asp-action="Edit" asp-route-id="@item.CategoryId">✏️ Sửa</a>
+
+                                <form asp-action="Delete" asp-route-id="@item.CategoryId"
+                                      method="post" class="d-inline"
+                                      onsubmit="return confirm('Bạn có chắc chắn muốn xoá danh mục này không?');">
+                                    <button type="submit" class="btn btn-sm btn-outline-danger">🗑️ Xoá</button>
+                                </form>
                             </td>
+
                         </tr>
                     }
                 }
