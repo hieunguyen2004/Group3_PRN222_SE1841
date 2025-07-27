@@ -41,6 +41,8 @@ namespace Service
                 }
 
                 user.Password = PasswordHasher.HashPassword(rawPassword);
+                user.RoleId = 1;
+                user.Status = "Active";
                 _repo.Add(user);
 
                 if (role == "recruiter")
@@ -70,6 +72,7 @@ namespace Service
         {
             var user = _repo.GetByUsername(username);
             if (user == null || !PasswordHasher.VerifyPassword(password, user.Password)) return null;
+            if (user.Status?.ToLower() != "active") return null;
             return user;
         }
 
