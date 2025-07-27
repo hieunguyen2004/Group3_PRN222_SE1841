@@ -74,6 +74,7 @@ namespace Repository
                     .ThenInclude(r => r.Company)
                 .Where(j => (j.EndDate == null || j.EndDate > DateOnly.FromDateTime(DateTime.Now)))
                 .Where(j => (j.Status == null || j.Status.ToLower() == "active"))
+                .Where(j => j.Recruiter != null && j.Recruiter.Company != null && (j.Recruiter.Company.StatusCompany == null || j.Recruiter.Company.StatusCompany == "active"))
                 .AsQueryable();
 
             if (!string.IsNullOrEmpty(searchTitle))
