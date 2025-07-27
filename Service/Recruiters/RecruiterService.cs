@@ -1,5 +1,6 @@
 ﻿using DAO.Models;
 using Repository.Recruiters;
+using Service.Interface;
 
 namespace Service.Recruiters
 {
@@ -12,7 +13,19 @@ namespace Service.Recruiters
             _recruiterRepository = recruiterRepository;
         }
 
-        public Recruiter? GetByUserId(int? userId) => _recruiterRepository.GetByUserId(userId);
+        public void Add(Recruiter recruiter)
+        {
+            _recruiterRepository.Add(recruiter);
+        }
 
+        public List<Recruiter> GetAll()
+        {
+            return _recruiterRepository.GetAll();
+        }
+
+        public Recruiter? GetByUserId(int? userId)
+        {
+            return _recruiterRepository.GetByUserId(userId);
+        }
     }
 }

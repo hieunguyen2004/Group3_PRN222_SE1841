@@ -1,9 +1,8 @@
 ﻿using DAO.Models;
 
-namespace Repository.Recruiters
+public interface IRecruiterRepository
 {
-    public interface IRecruiterRepository
-    {
-        Recruiter? GetByUserId(int? userId);
-    }
+    void Add(Recruiter recruiter);
+    List<Recruiter> GetAll();
+    Recruiter? GetByUserId(int? userId);
 }

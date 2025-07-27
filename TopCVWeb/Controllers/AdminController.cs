@@ -1,22 +1,37 @@
 ﻿using DAO.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
+using Service;
 using Service.Interface;
+using Service.Recruiters;
+using System.ComponentModel.Design;
 
 namespace TopCVWeb.Controllers
 {
     public class AdminController : Controller
     {
         private readonly IUserService _userService;
+        private readonly ICompanyService _companyService;
+        private readonly IRecruiterService _recruiterService;
 
-        public AdminController(IUserService userService)
+
+        public AdminController(
+            IUserService userService,
+            ICompanyService companyService,
+            IRecruiterService recruiterService)
         {
             _userService = userService;
+            _companyService = companyService;
+            _recruiterService = recruiterService;
         }
+
 
         // GET: /Admin/UserList
         public IActionResult UserList(string? searchTerm, int? role, int page = 1, int pageSize = 10)
         {
+            ViewBag.Companies = _companyService.GetAllAsync().Result;
+
             try
             {
                 var users = _userService.GetAll();
@@ -108,7 +123,8 @@ namespace TopCVWeb.Controllers
 
         [HttpPost]
         [HttpPost]
-        public IActionResult CreateRandomRecruiter()
+
+        public IActionResult CreateRandomRecruiter(int companyId)
         {
             var rand = new Random();
             string username;
@@ -138,6 +154,17 @@ namespace TopCVWeb.Controllers
                     };
 
                     _userService.Add(user);
+
+                 
+                    var recruiter = new Recruiter
+                    {
+                        UserId = user.UserId,
+                        CompanyId = companyId,
+                        CompanyEmail = user.Email,
+                        Position2 = "Nhân sự"
+                    };
+
+                    _recruiterService.Add(recruiter);
                     break;
                 }
             }
@@ -153,6 +180,7 @@ namespace TopCVWeb.Controllers
 
             return RedirectToAction("UserList");
         }
+
 
     }
 }

@@ -40,11 +40,27 @@
                 </form>
             </div>
             <div class="col-md-3 text-end">
-                <form asp-action="CreateRandomRecruiter" method="post">
-                    <button type="submit" class="btn btn-success shadow-sm w-100">
+                <form asp-action="CreateRandomRecruiter" method="post" class="d-flex gap-2">
+                    <select name="companyId" class="form-select shadow-sm" required>
+                        <option value="">-- Chọn công ty --</option>
+                        @if (ViewBag.Companies is List<DAO.Models.Company> companies)
+                        {
+                            foreach (var company in companies)
+                            {
+                                <option value="@company.CompanyId">@company.CompanyName</option>
+                            }
+                        }
+                        else
+                        {
+                            <option disabled>Không có công ty nào</option>
+                        }
+
+                    </select>
+                    <button type="submit" class="btn btn-success shadow-sm">
                         🎲 Tạo Recruiter ngẫu nhiên
                     </button>
                 </form>
+
             </div>
         </div>
 
