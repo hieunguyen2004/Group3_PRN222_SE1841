@@ -13,5 +13,6 @@ namespace Service.Interface
         Task<JobDetailViewModel?> GetJobDetailViewModelAsync(int jobId, int? seekerId);
         Task<bool> ToggleSaveJobAsync(int seekerId, int jobId);
         Task<List<JobViewModel>> GetSavedJobsAsync(int seekerId);
+        void UpdateJobNumberOfSeeker(int jobId);
     }
 }
