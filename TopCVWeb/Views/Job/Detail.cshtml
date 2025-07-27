@@ -1,7 +1,7 @@
 ﻿@model TopCVWeb.ViewModels.JobDetailViewModel
 @{
     ViewData["Title"] = Model.JobTitle;
-    bool status = Model.EndDate >= DateOnly.FromDateTime(DateTime.Now) && Model.JobStatus?.ToLower() == "active";
+    bool status = (Model.EndDate == null || Model.EndDate >= DateOnly.FromDateTime(DateTime.Now)) && (Model.JobStatus == null || Model.JobStatus.ToLower() == "active");
     var statusMessage = status ? "Đang tuyển" : "Hết hạn";
     string createDate = "N/A", endDate = "N/A";
     if (Model.CreateDate != null)
