@@ -1,4 +1,5 @@
 ﻿using DAO.Models;
+using Repository;
 using Repository.Interface;
 
 public class CategoryService : ICategoryService
@@ -40,4 +41,8 @@ public class CategoryService : ICategoryService
         await _repo.SaveAsync();
     }
 
+    public IEnumerable<Category> GetAll()
+    {
+        return _repo.GetAll();
+    }
 }
