@@ -4,27 +4,166 @@
     ViewData["Title"] = "Đăng bài tuyển dụng mới";
 }
 
-<h2>@ViewData["Title"]</h2>
+<h2 class="mb-4">@ViewData["Title"]</h2>
 
 <form asp-action="Create" method="post">
-    <div class="mb-3">
-        <label class="form-label">Tiêu đề</label>
-        <input asp-for="JobTitle" class="form-control" />
-        <span asp-validation-for="JobTitle" class="text-danger" />
+    <div class="row">
+        <!-- Cột trái -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label asp-for="JobTitle" class="form-label">Tiêu đề</label>
+                <input asp-for="JobTitle" class="form-control" />
+                <span asp-validation-for="JobTitle" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Position" class="form-label">Vị trí</label>
+                <input asp-for="Position" class="form-control" />
+                <span asp-validation-for="Position" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Experience" class="form-label">Kinh nghiệm</label>
+                <input asp-for="Experience" class="form-control" />
+                <span asp-validation-for="Experience" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Skills" class="form-label">Kỹ năng</label>
+                <input asp-for="Skills" class="form-control" />
+                <span asp-validation-for="Skills" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Gender" class="form-label">Giới tính</label>
+                <select asp-for="Gender" class="form-select">
+                    <option value="">Không yêu cầu</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
+                </select>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Profession" class="form-label">Nghề nghiệp</label>
+                <input asp-for="Profession" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="NumberOfSeeker" class="form-label">Số lượng</label>
+                <input asp-for="NumberOfSeeker" class="form-control" type="number" min="1" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="JobType" class="form-label">Loại</label>
+                <select asp-for="JobType" class="form-select">
+                    <option value="">-- Chọn --</option>
+                    <option value="Full-time">Full-time</option>
+                    <option value="Part-time">Part-time</option>
+                    <option value="Thực tập">Thực tập</option>
+                </select>
+            </div>
+        </div>
+
+        <!-- Cột phải -->
+        <div class="col-md-6">
+            <div class="mb-3">
+                <label asp-for="Location" class="form-label">Địa điểm</label>
+                <input asp-for="Location" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="WorkingTime" class="form-label">Thời gian</label>
+                <input asp-for="WorkingTime" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Salary" class="form-label">Lương</label>
+                <input asp-for="Salary" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Category" class="form-label">Danh mục</label>
+                <div class="d-flex gap-2">
+                    <select asp-for="CategoryId" class="form-select" asp-items="ViewBag.Categories">
+                        <option value="">-- Chọn danh mục --</option>
+                    </select>
+                    <button type="button" class="btn btn-outline-primary" data-bs-toggle="modal" data-bs-target="#addCategoryModal">
+                        +
+                    </button>
+                </div>
+                <span asp-validation-for="CategoryId" class="text-danger"></span>
+            </div>
+
+            <div class="modal fade" id="addCategoryModal" tabindex="-1">
+                <div class="modal-dialog">
+                    <div class="modal-content">
+                        <div class="modal-header">
+                            <h5 class="modal-title">Thêm danh mục mới</h5>
+                            <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                        </div>
+                        <div class="modal-body">
+                            <input type="text" id="newCategoryName" class="form-control" placeholder="Tên danh mục" />
+                        </div>
+                        <div class="modal-footer">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy</button>
+                            <button type="button" class="btn btn-primary" onclick="addCategory()">Lưu</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <script>
+                function addCategory() {
+                    var name = document.getElementById("newCategoryName").value;
+                    if (!name) {
+                        alert("Vui lòng nhập tên danh mục!");
+                        return;
+                    }
+
+                    fetch('/Category/Add', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ CategoryName: name })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        if (data.success) {
+                            // Thêm luôn vào dropdown
+                            var select = document.querySelector("select[name='CategoryId']");
+                            var option = document.createElement("option");
+                            option.value = data.categoryId;
+                            option.text = data.categoryName;
+                            select.add(option);
+
+                            select.value = data.categoryId; // chọn luôn category mới
+                            document.getElementById("newCategoryName").value = "";
+                            bootstrap.Modal.getInstance(document.getElementById("addCategoryModal")).hide();
+                        } else {
+                            alert("Thêm thất bại: " + data.message);
+                        }
+                    });
+                }
+            </script>
+
+            <div class="mb-3">
+                <label asp-for="EndDate" class="form-label">Hết hạn</label>
+                <input asp-for="EndDate" type="date" class="form-control" />
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="JobDescription" class="form-label">Mô tả</label>
+                <textarea asp-for="JobDescription" class="form-control" rows="3"></textarea>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Requirements" class="form-label">Yêu cầu</label>
+                <textarea asp-for="Requirements" class="form-control" rows="3"></textarea>
+            </div>
+        </div>
     </div>
 
-    <div class="mb-3">
-        <label class="form-label">Địa điểm</label>
-        <input asp-for="Location" class="form-control" />
-        <span asp-validation-for="Location" class="text-danger" />
+    <div class="mt-3">
+        <button type="submit" class="btn btn-success">Đăng bài</button>
+        <a asp-action="MyJobs" class="btn btn-secondary">Hủy</a>
     </div>
-
-    <div class="mb-3">
-        <label class="form-label">Lương</label>
-        <input asp-for="Salary" class="form-control" />
-        <span asp-validation-for="Salary" class="text-danger" />
-    </div>
-
-    <button type="submit" class="btn btn-success">Đăng bài</button>
-    <a asp-action="MyJobs" class="btn btn-secondary">Hủy</a>
 </form>

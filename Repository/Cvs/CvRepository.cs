@@ -16,5 +16,10 @@ namespace Repository.Cvs
         {
             return _context.Cvs.FirstOrDefault(c => c.CvId == cvId);
         }
+        public void Update(Cv cv) 
+        {
+            _context.Cvs.Update(cv);
+            _context.SaveChanges();
+        }
     }
 }

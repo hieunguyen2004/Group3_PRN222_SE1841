@@ -18,7 +18,13 @@
             <tr>
                 <td>@applicant.FullName</td>
                 <td>@applicant.SubmitDate?.ToString("dd/MM/yyyy")</td>
-                <td>@applicant.Status</td>
+                <td>
+                    <select class="form-select status-select" data-id="@applicant.CvId">
+                        <option value="Nộp đơn" selected="@(applicant.Status == "Nộp đơn")">Nộp đơn</option>
+                        <option value="Chấp nhận" selected="@(applicant.Status == "Chấp nhận")">Chấp nhận</option>
+                        <option value="Từ chối" selected="@(applicant.Status == "Từ chối")">Từ chối</option>
+                    </select>
+                </td>
                 <td>
                     <a asp-controller="CV" asp-action="ViewCV" asp-route-cvId="@applicant.CvId" target="_blank"  class="btn btn-sm btn-primary">
                             Xem
@@ -49,5 +55,30 @@
         }
     </tbody>
 </table>
+
+<script>
+    document.querySelectorAll('.status-select').forEach(select => {
+        select.addEventListener('change', function () {
+            const cvId = this.dataset.id;
+            const newStatus = this.value;
+
+            fetch('/Cv/UpdateStatus', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({ id: cvId, status: newStatus })
+            })
+            .then(res => res.json())
+            .then(data => {
+                if (data.success) {
+                    alert("Cập nhật thành công!");
+                } else {
+                    alert("Lỗi: " + data.message);
+                }
+            })
+            .catch(err => alert("Có lỗi: " + err));
+        });
+    });
+</script>
+
 
 <a asp-action="ManageApplicants" class="btn btn-secondary">Quay lại</a>

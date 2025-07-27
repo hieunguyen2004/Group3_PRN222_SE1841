@@ -10,5 +10,6 @@ namespace Service.Cvs
     public interface ICvService
     {
         Cv? GetById(int cvId);
+        void Update(Cv cv);
     }
 }
