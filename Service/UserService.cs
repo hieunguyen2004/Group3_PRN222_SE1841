@@ -45,16 +45,13 @@ namespace Service
                 user.Status = "Active";
                 _repo.Add(user);
 
-                if (role == "recruiter")
+                if (role == "jobseeker")
                 {
-                    var recruiter = new Recruiter
+                    var jobSeeker = new JobSeeker
                     {
-                        UserId = user.UserId,
-                        CompanyEmail = user.Email ?? "",
-                        Position2 = "",
-                        CompanyId = null
+                        UserId = user.UserId
                     };
-                    _context.Recruiters.Add(recruiter);
+                    _context.JobSeekers.Add(jobSeeker);
                 }
 
                 _repo.Save(); // Save toàn bộ
@@ -168,5 +165,16 @@ namespace Service
             _repo.Add(user);
             _repo.Save();
         }
+
+        public bool IsRecruiter(int userId)
+        {
+            return _context.Recruiters.Any(r => r.UserId == userId);
+        }
+
+        public bool IsJobSeeker(int userId)
+        {
+            return _context.JobSeekers.Any(j => j.UserId == userId);
+        }
+
     }
 }

@@ -26,6 +26,8 @@ namespace Service.Interface
         User? GetById(int id);
 
         void Add(User user);
+        bool IsRecruiter(int userId);
+        bool IsJobSeeker(int userId);
 
     }
 }

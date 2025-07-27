@@ -1,5 +1,6 @@
 ﻿@using Microsoft.AspNetCore.Http
 @inject IHttpContextAccessor HttpContextAccessor
+@inject Service.Interface.IUserService _userService
 
 <!DOCTYPE html>
 <html lang="en">
@@ -32,6 +33,24 @@
                     <ul class="navbar-nav">
                         @{
                             var username = HttpContextAccessor.HttpContext.Session.GetString("username");
+                            var roleId = HttpContextAccessor.HttpContext.Session.GetInt32("RoleId");
+                            var userId = HttpContextAccessor.HttpContext.Session.GetInt32("userId") ?? 0;
+                            var isRecruiter = _userService.IsRecruiter(userId);
+                        }
+                        @if (isRecruiter)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Category" asp-action="Index">Category Management</a>
+                            </li>
+                        }
+                        @if (roleId == 3)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="UserList">List User</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Company" asp-action="Index">Company Management</a>
+                            </li>
                         }
                         @if (!string.IsNullOrEmpty(username))
                         {
