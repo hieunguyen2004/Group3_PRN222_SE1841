@@ -26,7 +26,7 @@ namespace TopCVWeb.Controllers
                 return NotFound();
             }
 
-            int check = await _jobService.UpdateJobNumberOfSeeker(id);
+            await _jobService.UpdateJobNumberOfSeeker(id);
             _logger.LogInformation($"Job detail viewed: {id} by Seeker: {seekerId}");
             return View(viewModel);
         }
