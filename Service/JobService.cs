@@ -141,7 +141,6 @@ namespace Service
             if (job != null)
             {
                 job.NumberOfSeeker = (job.NumberOfSeeker ?? 0) + 1;
-                _unitOfWork.Jobs.Update(job);
                 await _unitOfWork.SaveChangesAsync();
             }
         }
