@@ -38,19 +38,22 @@
                          @if (roleId == 2)
                          {
                              <li class="nav-item">
-                                 <a class="nav-link text-dark" asp-controller="Jobs" asp-action="MyJobs">My Jobs</a>
+                                 <a class="nav-link text-dark" asp-controller="Jobs" asp-action="MyJobs">Quản lý bài đăng</a>
                              </li>
+                            <li class="nav-item">
+                                <a class="nav-link text-dark" asp-controller="Jobs" asp-action="ManageApplicants">Xem ứng viên</a>
+                            </li>
                          }
                         @if (roleId == 3)
                         {
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Category" asp-action="Index">Category Management</a>
+                                <a class="nav-link text-dark" asp-controller="Category" asp-action="Index">Quản lý danh mục</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="UserList">List User</a>
+                                <a class="nav-link text-dark" asp-controller="Admin" asp-action="UserList">DS Người dùng</a>
                             </li>
                             <li class="nav-item">
-                                <a class="nav-link text-dark" asp-controller="Company" asp-action="Index">Company Management</a>
+                                <a class="nav-link text-dark" asp-controller="Company" asp-action="Index">Quản lý công ty</a>
                             </li>
                         }
                         @if (!string.IsNullOrEmpty(username))
