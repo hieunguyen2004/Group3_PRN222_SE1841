@@ -135,7 +135,7 @@ namespace Service
             }
         }
 
-        public async void UpdateJobNumberOfSeeker(int jobId)
+        public async Task<int> UpdateJobNumberOfSeeker(int jobId)
         {
             var job = await _unitOfWork.Jobs.GetByIdAsync(jobId);
             if (job != null)
@@ -144,6 +144,7 @@ namespace Service
                 _unitOfWork.Jobs.Update(job);
                 await _unitOfWork.SaveChangesAsync();
             }
+            return 1;
         }
     }
 }
